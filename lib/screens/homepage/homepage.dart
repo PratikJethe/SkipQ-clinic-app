@@ -1,4 +1,4 @@
-import 'package:booktokenclinicapp/providers/user_provider.dart';
+import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('BookTokenUser')),
-      body: Consumer<UserProvider>(builder: (context, userProvider, _) {
+      body: Consumer<ClinicProvider>(builder: (context, userProvider, _) {
         return Container(
           child: Center(
               child: TextButton(

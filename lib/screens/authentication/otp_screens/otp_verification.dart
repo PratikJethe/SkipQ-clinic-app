@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/providers/user_provider.dart';
+import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/service/firebase_services/auth_service.dart';
 import 'package:booktokenclinicapp/service/firebase_services/fcm_service.dart';
 import 'package:booktokenclinicapp/utils/validators.dart';
@@ -118,8 +118,8 @@ class _OtpVerificationState extends State<OtpVerification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<UserProvider>(
-        builder: (context, userProvider, _) => Form(
+      body: Consumer<ClinicProvider>(
+        builder: (context, clinicProvider, _) => Form(
           key: _formKey,
           child: !codeSent
               ? Column(
@@ -235,7 +235,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                         fontSize: 16.0);
                                   }
 
-                                  await userProvider.phoneLogin({"phoneNo": int.parse(phoneNo!), "uid": user!.uid, "fcm": token}, context);
+                                  await clinicProvider.phoneLogin({"phoneNo": int.parse(phoneNo!), "uid": user!.uid, "fcm": token}, context);
                                 }
                               }
                             },

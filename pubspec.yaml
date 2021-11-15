@@ -48,6 +48,9 @@ dependencies:
   pin_code_fields: ^7.3.0
   flutter_google_places: ^0.3.0
   google_maps_webservice: ^0.0.19
+  json_serializable: ^6.0.1
+  json_annotation: ^4.3.0
+  build_runner: ^2.1.4
 
 dev_dependencies:
   flutter_test:
@@ -58,7 +61,6 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

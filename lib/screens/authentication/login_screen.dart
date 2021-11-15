@@ -1,4 +1,4 @@
-import 'package:booktokenclinicapp/providers/user_provider.dart';
+import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/screens/authentication/otp_screens/otp_verification.dart';
 import 'package:booktokenclinicapp/screens/authentication/registration_screen.dart';
 import 'package:booktokenclinicapp/service/firebase_services/auth_service.dart';

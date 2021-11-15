@@ -1,4 +1,4 @@
-import 'package:booktokenclinicapp/providers/user_provider.dart';
+import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/screens/authentication/registration_screen.dart';
 import 'package:booktokenclinicapp/service/initialize_app.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
         }
         return;
       }
-      Provider.of<UserProvider>(context, listen: false).getUser(context);
+      Provider.of<ClinicProvider>(context, listen: false).getClinic(context);
     }).catchError((e) {
       initializeError = true;
       if (mounted) {
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Consumer<UserProvider>(
+      child: Consumer<ClinicProvider>(
         builder: (context, userProvider, _) {
           return !initializeError
               ?
@@ -65,3 +65,25 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+
+
+//  factory Clinic.fromJson(Map<String, dynamic> json) => Clinic(
+//         id: json["_id"].toString(),
+//         clinicName: json["clinicName"],
+//         authProvider: json["authProvider"],
+//         fcm: json["fcm"],
+//         doctorName: json["doctorName"],
+//         hasClinicStated: json["hasClinicStated"],
+//         isSubscribed: json["isSubscribed"],
+//         isVerified: json["isVerified"],
+//         speciality: json["speciality"],
+//         subEndDate: json["subEndDate"],
+//         subStartDate: json["subStartDate"],
+//         address: Address.fromJson(json["address"]) ,
+//         contact: Contact.fromJson(json["contact"]),
+//         gender: resolveGender(json["gender"]),
+//         email: json["email"],
+//         profilePicUrl: json["profilePicUrl"],
+//         dob: json["dateOfBirth"] != null ? DateTime.parse(json["dateOfBirth"]) : null,
+//       );

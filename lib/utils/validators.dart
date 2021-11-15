@@ -11,9 +11,16 @@ String? validateMobile(String? value) {
   return null;
 }
 
-String? validateName(String? value) {
+String? validateClinicName(String? value) {
   if (value == null || value.trim().isEmpty) {
-    return 'Name is required';
+    return 'Doctor\'s name is required';
+  }
+  return null;
+}
+
+String? validateDoctorName(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return 'Clinics\'s name is required';
   }
   return null;
 }
@@ -58,11 +65,16 @@ String? validateApartment(String? value) {
 }
 
 String? validateCity(String? value) {
-  if (value == null) {
-    return null;
+  if (value == null || value.trim().isEmpty) {
+    return 'city is required';
   }
-  if (value.trim().isEmpty) {
-    return null;
+  return null;
+}
+
+String? validateAddress(String? value) {
+  print(value == null || value.trim().isEmpty);
+  if (value == null || value.trim().isEmpty) {
+    return 'Address is required';
   }
   return null;
 }

@@ -1,8 +1,9 @@
 import 'dart:ffi';
 
 import 'package:booktokenclinicapp/config/config.dart';
+import 'package:booktokenclinicapp/constants/api_constant.dart';
 import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/providers/user_provider.dart';
+import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/service/firebase_services/fcm_service.dart';
 import 'package:booktokenclinicapp/service/firebase_services/firebase_service.dart';
 import 'package:booktokenclinicapp/utils/validators.dart';
@@ -28,6 +29,7 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _clinicNameController = TextEditingController();
   TextEditingController _mobileNumberController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pincodeController = TextEditingController();
@@ -38,11 +40,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   late String uid;
   late int mobileNumber;
-  String? name, email, address, apartment, pinocde, dob, gender = '', city;
+
+  String specialityFilterString = '';
+
+  String? name, email, address, apartment, pinocde, dob, gender = '', city, clinicName;
   List<String> genderList = ['MALE', 'FEMALE', 'OTHER', ''];
   List<double> coordinates = [];
   FcmService _fcmService = getIt.get<FcmService>();
   DateTime? selectedDate;
+
+  bool errorInSpeciality = false;
+
+  List<String> selecetdSepaciality = [];
 
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -65,6 +74,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
+  _updateUi() {
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,31 +87,64 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    _fullNameController.dispose();
+    _clinicNameController.dispose();
+    _mobileNumberController.dispose();
+    _emailController.dispose();
+    _pincodeController.dispose();
+    _cityController.dispose();
+    _apartemntController.dispose();
+    _addressController.dispose();
+    _dobController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Registration Screen'),
       ),
-      body: Consumer<UserProvider>(
-        builder: (context, userprovider, _) => SingleChildScrollView(
+      body: Consumer<ClinicProvider>(
+        builder: (context, clinicProvider, _) => SingleChildScrollView(
           child: Container(
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
                   TextInputComponent(
-                      'Full Name',
+                      'Doctor\'s Name',
                       TextFormField(
+                        maxLength: 20,
                         controller: _fullNameController,
                         onChanged: (value) {
                           setState(() {
                             name = value.trim();
                           });
                         },
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           contentPadding: EdgeInsets.symmetric(vertical: 0),
                         ),
-                        validator: validateName,
+                        validator: validateDoctorName,
+                      ),
+                      true),
+                  TextInputComponent(
+                      'Clinic\'s Name',
+                      TextFormField(
+                        maxLength: 20,
+                        controller: _clinicNameController,
+                        onChanged: (value) {
+                          setState(() {
+                            clinicName = value.trim();
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 0),
+                        ),
+                        validator: validateClinicName,
                       ),
                       true),
                   TextInputComponent(
@@ -108,6 +154,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         enabled: false,
                       ),
                       true),
+
                   TextInputComponent(
                       'Email',
                       TextFormField(
@@ -175,10 +222,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       }
                     },
                     child: TextInputComponent(
-                      'address',
+                      'Address',
                       TextFormField(
                         enabled: false,
+                        decoration: InputDecoration(
+                          errorStyle: TextStyle(
+                            color: Theme.of(context).errorColor, // or any other color
+                          ),
+                        ),
                         controller: _addressController,
+                        validator: validateAddress,
                       ),
                       false,
                     ),
@@ -186,6 +239,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   TextInputComponent(
                     'Apartment',
                     TextFormField(
+                      maxLength: 50,
                       controller: _apartemntController,
                       onChanged: (value) {
                         setState(() {
@@ -195,6 +249,40 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       validator: validateApartment,
                     ),
                     false,
+                  ), // auto filled or manual
+                  TextInputComponent(
+                    'Speciality',
+                    GestureDetector(
+                      onTap: () async {
+                        await _showBottomSheet();
+                        _updateUi();
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+                            width: double.infinity,
+                            constraints: BoxConstraints(minHeight: 60),
+                            child: selecetdSepaciality.length == 0
+                                ? Align(alignment: Alignment.centerLeft, child: Text('select speciality'))
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Wrap(
+                                      spacing: 10,
+                                      children: [...selecetdSepaciality.map((e) => ActionChip(label: Text(e), onPressed: () {}))],
+                                    ),
+                                  ),
+                          ),
+                          if (errorInSpeciality)
+                            Text(
+                              'Minimum 1 and Maximum 3 specialities are required',
+                              style: TextStyle(color: Colors.red),
+                            )
+                        ],
+                      ),
+                    ),
+                    true,
                   ), // auto filled or manual
                   GestureDetector(
                     onTap: () async {
@@ -231,6 +319,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       'City',
                       TextFormField(
                         enabled: false,
+                        decoration: InputDecoration(
+                          errorStyle: TextStyle(
+                            color: Theme.of(context).errorColor, // or any other color
+                          ),
+                        ),
                         controller: _cityController,
                         onChanged: (value) {
                           setState(() {
@@ -251,9 +344,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       TextFormField(
                         controller: _dobController,
                         enabled: false,
-                        decoration: InputDecoration(hintText: 'Select birth date'),
+                        decoration: const InputDecoration(hintText: 'Select birth date'),
                         onChanged: (value) {},
-                        validator: validateCity,
                       ),
                       false,
                     ),
@@ -341,7 +433,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         "address": address,
                         "coordinates": coordinates,
                       });
-                      if (_formKey.currentState!.validate()) {
+
+                      print(selecetdSepaciality.length);
+                      if (selecetdSepaciality.length == 0 || selecetdSepaciality.length > 3) {
+                        setState(() {
+                          errorInSpeciality = true;
+                        });
+                      }
+
+                      if (_formKey.currentState!.validate() && errorInSpeciality) {
                         String? token = await _fcmService.refreshToken();
 
                         if (token == null) {
@@ -350,31 +450,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           return;
                         }
 
-                        print({
-                          "fullName": name?.trim(),
-                          "email": email == null || email!.isEmpty ? null : email,
-                          "phoneNo": mobileNumber,
-                          "pincode": pinocde == null || pinocde!.isEmpty ? null : pinocde,
-                          "address": address == null || address!.isEmpty ? null : address,
-                          "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
-                          "gender": gender == "" ? null : gender,
-                          "city": city == null || city!.isEmpty ? null : city,
-                          "dateOfBirth": dob,
-                          "fcm": token,
-                          "uid": uid,
-                          "coordinates": coordinates.length < 2 ? null : coordinates,
-                        });
+                        // print({
+                        //   "fullName": name?.trim(),
+                        //   "email": email == null || email!.isEmpty ? null : email,
+                        //   "phoneNo": mobileNumber,
+                        //   "pincode": pinocde == null || pinocde!.isEmpty ? null : pinocde,
+                        //   "address": address == null || address!.isEmpty ? null : address,
+                        //   "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
+                        //   "gender": gender == "" ? null : gender,
+                        //   "city": city == null || city!.isEmpty ? null : city,
+                        //   "dateOfBirth": dob,
+                        //   "fcm": token,
+                        //   "uid": uid,
+                        //   "coordinates": coordinates.length < 2 ? null : coordinates,
+                        // });
 
-                        print(coordinates.length);
+                        // print(coordinates.length);
                         Map<String, dynamic> payload = {
-                          "fullName": name?.trim(),
+                          "doctorName": name?.trim(),
+                          "clinicName": clinicName?.trim(),
                           "email": email == null || email!.isEmpty ? null : email,
                           "phoneNo": mobileNumber,
                           "pincode": pinocde == null || pinocde!.isEmpty ? null : pinocde,
-                          "address": address == null || address!.isEmpty ? null : address,
+                          "address": address?.trim(),
                           "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
                           "gender": gender == "" ? null : gender,
                           "city": city == null || city!.isEmpty ? null : city,
+                          "speciality": selecetdSepaciality,
                           "dateOfBirth": dob,
                           "fcm": token,
                           "uid": uid,
@@ -382,7 +484,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         };
                         print(payload);
                         payload.removeWhere((key, value) => value == null || value == '');
-                        await userprovider.register(payload, context);
+                        await clinicProvider.register(payload, context);
                       }
                     },
                     child: Text('Submit'),
@@ -394,6 +496,84 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
+  }
+
+  Future _showBottomSheet() async {
+    return showModalBottomSheet(
+        isScrollControlled: true,
+        clipBehavior: Clip.hardEdge,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+        context: context,
+        builder: (builder) {
+          return StatefulBuilder(
+            builder: (context, setState) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(width: double.infinity, height: 60, child: Center(child: Text('Select min 1 and max 3 specialities'))),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  width: double.infinity,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Search for speciality',
+                      border: UnderlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        specialityFilterString = value.trim();
+                      });
+                    },
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ...doctorSpecialty.map(
+                          (e) => e.toLowerCase().contains(specialityFilterString.toLowerCase()) || specialityFilterString.isEmpty
+                              ? CheckboxListTile(
+                                  title: Text(e),
+                                  value: selecetdSepaciality.contains(e),
+                                  onChanged: (value) {
+                                    print(value);
+                                    if (value == true) {
+                                      if (selecetdSepaciality.length == 3) {
+                                        Fluttertoast.showToast(
+                                            msg: "Alreday 3 specialities selected",
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 2,
+                                            fontSize: 16.0);
+                                        return;
+                                      }
+                                      setState(() {
+                                        selecetdSepaciality.add(e);
+                                      });
+                                    }
+                                    if (value == false) {
+                                      setState(() {
+                                        selecetdSepaciality.remove(e);
+                                      });
+                                    }
+                                  },
+                                )
+                              : Container(),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {
+                      _updateUi();
+                      Navigator.pop(context);
+                    },
+                    child: Text('Sumbit'))
+              ],
+            ),
+          );
+        });
   }
 }
 
