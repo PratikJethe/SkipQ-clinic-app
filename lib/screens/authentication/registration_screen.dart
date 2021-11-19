@@ -4,9 +4,12 @@ import 'package:booktokenclinicapp/config/config.dart';
 import 'package:booktokenclinicapp/constants/api_constant.dart';
 import 'package:booktokenclinicapp/main.dart';
 import 'package:booktokenclinicapp/providers/clinic_provider.dart';
+import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:booktokenclinicapp/service/firebase_services/fcm_service.dart';
 import 'package:booktokenclinicapp/service/firebase_services/firebase_service.dart';
 import 'package:booktokenclinicapp/utils/validators.dart';
+import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
+import 'package:booktokenclinicapp/widgets/textfield_borders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -105,9 +108,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Registration Screen'),
-      ),
+      appBar: backArrowAppbar(context),
       body: Consumer<ClinicProvider>(
         builder: (context, clinicProvider, _) => SingleChildScrollView(
           child: Container(
@@ -118,38 +119,64 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   TextInputComponent(
                       'Doctor\'s Name',
                       TextFormField(
-                        maxLength: 20,
+                        maxLength: 30,
                         controller: _fullNameController,
                         onChanged: (value) {
                           setState(() {
                             name = value.trim();
                           });
                         },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 0),
-                        ),
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            enabledBorder: formBorder,
+                            focusedBorder: formBorder,
+                            errorBorder: formErrorBorder,
+                            focusedErrorBorder: formErrorBorder),
                         validator: validateDoctorName,
                       ),
                       true),
                   TextInputComponent(
                       'Clinic\'s Name',
                       TextFormField(
-                        maxLength: 20,
+                        maxLength: 30,
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
                         controller: _clinicNameController,
                         onChanged: (value) {
                           setState(() {
                             clinicName = value.trim();
                           });
                         },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 0),
-                        ),
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            enabledBorder: formBorder,
+                            focusedBorder: formBorder,
+                            errorBorder: formErrorBorder,
+                            focusedErrorBorder: formErrorBorder),
                         validator: validateClinicName,
                       ),
                       true),
                   TextInputComponent(
-                      'Mobile Number',
+                      'Contact',
                       TextFormField(
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
+                        decoration: InputDecoration(
+                          enabledBorder: formBorder,
+                          focusedBorder: formBorder,
+                          disabledBorder: formBorder,
+                          errorBorder: formErrorBorder,
+                          focusedErrorBorder: formErrorBorder,
+                          prefixIconConstraints: BoxConstraints(minHeight: 30, maxWidth: 40, maxHeight: 30),
+                          prefixIcon: Container(
+                              margin: EdgeInsets.only(right: 8),
+                              decoration: BoxDecoration(
+                                border: Border(right: BorderSide(color: R.color.black)),
+                              ),
+                              child: Center(child: Text('+91'))),
+                        ),
                         controller: _mobileNumberController,
                         enabled: false,
                       ),
@@ -158,6 +185,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   TextInputComponent(
                       'Email',
                       TextFormField(
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
+                        maxLength: 40,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            enabledBorder: formBorder,
+                            focusedBorder: formBorder,
+                            errorBorder: formErrorBorder,
+                            focusedErrorBorder: formErrorBorder),
                         controller: _emailController,
                         onChanged: (value) {
                           setState(() {
@@ -173,6 +209,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       'Pincode',
                       TextFormField(
                         controller: _pincodeController,
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            enabledBorder: formBorder,
+                            focusedBorder: formBorder,
+                            errorBorder: formErrorBorder,
+                            focusedErrorBorder: formErrorBorder),
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         onChanged: (value) {
                           setState(() {
@@ -225,22 +269,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       'Address',
                       TextFormField(
                         enabled: false,
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
                         decoration: InputDecoration(
-                          errorStyle: TextStyle(
-                            color: Theme.of(context).errorColor, // or any other color
-                          ),
-                        ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            enabledBorder: formBorder,
+                            focusedBorder: formBorder,
+                            disabledBorder: formBorder,
+                            errorBorder: formErrorBorder,
+                            focusedErrorBorder: formErrorBorder),
                         controller: _addressController,
                         validator: validateAddress,
                       ),
-                      false,
+                      true,
                     ),
                   ), // auto filled or manual
                   TextInputComponent(
                     'Apartment',
                     TextFormField(
-                      maxLength: 50,
+                      maxLength: 60,
                       controller: _apartemntController,
+                      cursorColor: R.color.primary,
+                      cursorHeight: 25,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                          enabledBorder: formBorder,
+                          focusedBorder: formBorder,
+                          errorBorder: formErrorBorder,
+                          focusedErrorBorder: formErrorBorder),
                       onChanged: (value) {
                         setState(() {
                           apartment = value.trim();
@@ -319,11 +375,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       'City',
                       TextFormField(
                         enabled: false,
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
                         decoration: InputDecoration(
-                          errorStyle: TextStyle(
-                            color: Theme.of(context).errorColor, // or any other color
-                          ),
-                        ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            enabledBorder: formBorder,
+                            focusedBorder: formBorder,
+                            disabledBorder: formBorder,
+                            errorBorder: formErrorBorder,
+                            focusedErrorBorder: formErrorBorder),
                         controller: _cityController,
                         onChanged: (value) {
                           setState(() {
@@ -332,7 +392,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                         validator: validateCity,
                       ),
-                      false,
+                      true,
                     ),
                   ), // auto filled or manual
                   GestureDetector(
@@ -344,7 +404,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       TextFormField(
                         controller: _dobController,
                         enabled: false,
-                        decoration: const InputDecoration(hintText: 'Select birth date'),
+                        cursorColor: R.color.primary,
+                        cursorHeight: 25,
+                        decoration: InputDecoration(
+                            hintText: 'Select birth date',
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            enabledBorder: formBorder,
+                            focusedBorder: formBorder,
+                            disabledBorder: formBorder,
+                            errorBorder: formErrorBorder,
+                            focusedErrorBorder: formErrorBorder),
                         onChanged: (value) {},
                       ),
                       false,
@@ -353,71 +422,77 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                   TextInputComponent(
                       'Gender',
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Radio(
-                                    value: 'MALE',
-                                    groupValue: gender,
-                                    onChanged: (value) {
-                                      print(value);
-                                      gender = value.toString();
-                                      setState(() {});
-                                    }),
-                                Text('Male')
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Radio(
-                                    value: 'FEMALE',
-                                    groupValue: gender,
-                                    onChanged: (value) {
-                                      print(value);
-                                      setState(() {});
-                                      gender = value.toString();
-                                    }),
-                                Text('Female')
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Radio(
-                                    value: 'OTHER',
-                                    groupValue: gender,
-                                    onChanged: (value) {
-                                      gender = value.toString();
-                                      setState(() {});
-                                      print(value);
-                                    }),
-                                Text('Other')
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Radio(
-                                    value: '',
-                                    groupValue: gender,
-                                    onChanged: (value) {
-                                      gender = '';
-                                      setState(() {});
-                                    }),
-                                Text('None')
-                              ],
-                            ),
-                          ],
+                      FittedBox(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                      fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                      value: 'MALE',
+                                      groupValue: gender,
+                                      onChanged: (value) {
+                                        print(value);
+                                        gender = value.toString();
+                                        setState(() {});
+                                      }),
+                                  Text('Male')
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                      fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                      value: 'FEMALE',
+                                      groupValue: gender,
+                                      onChanged: (value) {
+                                        print(value);
+                                        setState(() {});
+                                        gender = value.toString();
+                                      }),
+                                  Text('Female')
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                      fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                      value: 'OTHER',
+                                      groupValue: gender,
+                                      onChanged: (value) {
+                                        gender = value.toString();
+                                        setState(() {});
+                                        print(value);
+                                      }),
+                                  Text('Other')
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                      fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                      value: '',
+                                      groupValue: gender,
+                                      onChanged: (value) {
+                                        gender = '';
+                                        setState(() {});
+                                      }),
+                                  Text('None')
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      true),
+                      false),
                   // TextInputComponent('Date of Birth', TextFormField(), true),
-                  MaterialButton(
+                  TextButton(
                     onPressed: () async {
                       print({
                         "name": name?.trim(),
@@ -439,9 +514,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         setState(() {
                           errorInSpeciality = true;
                         });
+                      } else {
+                        setState(() {
+                          errorInSpeciality = false;
+                        });
                       }
 
-                      if (_formKey.currentState!.validate() && errorInSpeciality) {
+                      if (_formKey.currentState!.validate() && !errorInSpeciality) {
                         String? token = await _fcmService.refreshToken();
 
                         if (token == null) {
@@ -487,7 +566,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         await clinicProvider.register(payload, context);
                       }
                     },
-                    child: Text('Submit'),
+                    child: Card(
+                      child: Container(
+                          width: 160,
+                          height: 40,
+                          color: R.color.primaryL1,
+                          child: Center(
+                              child: Text(
+                            'Register',
+                            style: R.styles.fz16Fw500.merge(TextStyle(color: Colors.white)),
+                          ))),
+                    ),
                   )
                 ],
               ),
@@ -592,11 +681,26 @@ class _TextInputComponentState extends State<TextInputComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      margin: EdgeInsets.only(top: 20, left: 15, right: 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(widget.fieldName), widget.textFormField],
+        children: [
+          Row(
+            children: [
+              Text(
+                widget.fieldName,
+                style: R.styles.fz16Fw500,
+              ),
+              SizedBox(width: 5),
+              widget.isRequired ? Text('(required)') : Text('(optional)')
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(child: widget.textFormField)
+        ],
       ),
     );
   }

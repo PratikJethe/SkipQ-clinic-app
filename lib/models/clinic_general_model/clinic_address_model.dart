@@ -8,7 +8,7 @@ class ClinicAddress {
   String address;
   String? apartment;
   String city;
-  int? pincode;
+  String? pincode;
   @JsonKey(fromJson: coordinatesFromJson, name: "geometry")
   List<double> coordinates;
 

@@ -68,6 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
 
+
 //  factory Clinic.fromJson(Map<String, dynamic> json) => Clinic(
 //         id: json["_id"].toString(),
 //         clinicName: json["clinicName"],

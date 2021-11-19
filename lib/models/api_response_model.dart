@@ -1,3 +1,4 @@
+
 class SuccessResponse {
   bool error;
   int code;
@@ -20,4 +21,10 @@ class ApiResponse {
    dynamic data;
  
   ApiResponse(this.statusCode, this.data, this.errMsg, this.error);
+}
+class ServiceResponse {
+  ApiResponse apiResponse;
+  dynamic data;
+
+  ServiceResponse(this.apiResponse, {this.data});
 }
