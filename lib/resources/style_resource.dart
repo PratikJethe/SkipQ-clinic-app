@@ -13,6 +13,7 @@ class ResourceStyles {
   TextStyle get fontColorPrimaryL1 => TextStyle(color: colors.primaryL1);
   TextStyle get fontColorPrimaryL2 => TextStyle(color: colors.primaryL2);
   TextStyle get fontColorGrey => TextStyle(color: Colors.grey[700]);
+  TextStyle get fontColorBluishGrey => TextStyle(color: colors.bluishGrey);
   TextStyle get fontColorBlack => TextStyle(color: Colors.black);
 
   final TextStyle fz12 = TextStyle(fontSize: 12);
@@ -113,4 +114,7 @@ class ResourceStyles {
   //         borderRadius: BorderRadius.circular(50),
   //       ),
   //     );
+
+
+
 }

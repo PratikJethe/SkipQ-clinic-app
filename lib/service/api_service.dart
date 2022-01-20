@@ -47,6 +47,18 @@ class ApiService {
     }
   }
 
+  Future<ApiResponse> put(String path) async {
+    try {
+      print(baseUrl + path);
+      var response = await _dio.put(baseUrl + path);
+
+      return _customResponse((response.data));
+    } catch (e) {
+      print(e);
+      return _customErrorResponse(e);
+    }
+  }
+
   Future<ApiResponse> post(String path, dynamic data) async {
     print(baseUrl + path);
 
@@ -63,7 +75,10 @@ class ApiService {
 
   ApiResponse _customErrorResponse(e) {
     print(e);
-    if (e is DioError && e.type == DioErrorType.response) {
+    // e.response?.statusCode!=502
+    if (e is DioError && e.type == DioErrorType.response &&   e.response!.data.runtimeType != String) {
+      // print(e.error);
+      
       return ApiResponse(e.response!.data!["status"], {}, e.response!.data!["errorMsg"], true);
     } else {
       return ApiResponse(500, {}, "server error", true);

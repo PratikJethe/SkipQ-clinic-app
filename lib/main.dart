@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/screens/splash_screen/splash_screen.dart';
 import 'package:booktokenclinicapp/service/api_service.dart';
@@ -15,6 +16,23 @@ void main() async {
   getIt.registerLazySingleton(() => FirebaseAuthService());
   getIt.registerLazySingleton(() => FcmService());
   await getIt.get<ApiService>().addCookieInceptor();
+  AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      null,
+      [
+        NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            defaultColor: Color(0xFF9D50DD),
+            
+            importance: NotificationImportance.Max,
+            ledColor: Colors.white)
+      ],
+      // Channel groups are only visual and are not required
+      channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
+      debug: true);
   runApp(MyApp());
 }
 
@@ -23,16 +41,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => ClinicProvider())
-          ],
+        providers: [ChangeNotifierProvider(create: (_) => ClinicProvider())],
         child: MaterialApp(
-          title: 'BookToken',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: SplashScreen()
-          
-        ));
+            title: 'BookToken',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              // fontFamily: 'Lato'
+            ),
+            home: SplashScreen()));
   }
 }

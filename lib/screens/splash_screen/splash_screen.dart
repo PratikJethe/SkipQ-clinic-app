@@ -1,4 +1,5 @@
 import 'package:booktokenclinicapp/providers/clinic_provider.dart';
+import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:booktokenclinicapp/screens/authentication/registration_screen.dart';
 import 'package:booktokenclinicapp/service/initialize_app.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         setState(() {});
       }
     });
+
     //if fetch user and navigate a  ccording to it
   }
 
@@ -52,9 +54,13 @@ class _SplashScreenState extends State<SplashScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Book Token',
-                          style: TextStyle(color: Colors.blueAccent, fontSize: 60, fontWeight: FontWeight.w700),
+                          'Book Online Token',
+                          style: TextStyle(color: R.color.primary, fontSize: 30, fontWeight: FontWeight.w700),
                         ),
+                        SizedBox(height: 40),
+                        CircularProgressIndicator(
+                          color: R.color.primary,
+                        )
                       ],
                     ),
                   ),

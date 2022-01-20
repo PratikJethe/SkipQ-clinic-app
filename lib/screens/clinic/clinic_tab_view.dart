@@ -1,9 +1,12 @@
 import 'dart:ffi';
 
+import 'package:booktokenclinicapp/models/api_response_model.dart';
+import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/resources/resources.dart';
 
 import 'package:booktokenclinicapp/models/clinic_model.dart';
 import 'package:booktokenclinicapp/screens/clinic/tab_views/about_clinic.dart';
+import 'package:booktokenclinicapp/screens/clinic/tab_views/request_view.dart';
 import 'package:booktokenclinicapp/screens/clinic/tab_views/token_view.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +65,7 @@ class _ClinicTabViewState extends State<ClinicTabView> with TickerProviderStateM
                       controller: _tabController,
                       tabs: [
                         Tab(text: "Token"),
-                        Tab(text: "Notice"),
+                        Tab(text: "Request"),
                         Tab(text: "About"),
                       ]),
                 ),
@@ -78,15 +81,12 @@ class _ClinicTabViewState extends State<ClinicTabView> with TickerProviderStateM
                       //     child: Text("Token View"),
                       //   ),
                       // ),
-                      Expanded(
-                        child: Container(
-                          child: Text("Request View"),
-                        ),
+                      Container(
+                        child: CllinicRequestView(clinic: clinic),
                       ),
-                      Expanded(
-                          child: AboutClinic(
+                      AboutClinic(
                         clinic: clinic,
-                      ))
+                      )
                     ]),
                   ),
                 )
@@ -97,4 +97,31 @@ class _ClinicTabViewState extends State<ClinicTabView> with TickerProviderStateM
       ),
     );
   }
+}
+
+showAlertBoxTokenAction(String title, String buttontText, Function callback, BuildContext context) {
+  print('alert dialog');
+  return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text(title),
+            actions: [
+              TextButton(
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(R.color.primary)),
+                  onPressed: () {
+                    callback();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    buttontText,
+                    style: R.styles.fontColorWhite,
+                  )),
+              TextButton(
+                  style: ButtonStyle(),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel'))
+            ],
+          ));
 }

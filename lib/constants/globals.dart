@@ -26,5 +26,15 @@ enum UserType {
   @JsonValue('OFFLINE')
   OFFLINE
 }
+enum SubscriptionType {
+  @JsonValue('FREE_TRIAL')
+  FREE_TRIAL,
+
+  @JsonValue('PAID')
+  PAID,
+  @JsonValue('EXTENDED_BY_ADMIN')
+  EXTENDED_BY_ADMIN
+
+}
 
 enum TokenActionButtonState { LOADING, ERROR, REQUEST, CANCEL_REQUEST, CANCEL_TOKEN, NAVIGATE }

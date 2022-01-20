@@ -17,13 +17,14 @@ class ClinicToken {
   Clinic clinic;
   @JsonKey(name: 'userId')
   User? user;
+  int? tokenNumber;
   TokenStatus tokenStatus;
   UserType userType;
   @JsonKey(fromJson: utcToLocal)
   DateTime createdAt;
   @JsonKey(fromJson: utcToLocal)
   DateTime updatedAt;
-
+  String? userName;
   bool get isOnline {
     return userType == UserType.ONLINE;
   }
@@ -35,6 +36,8 @@ class ClinicToken {
       required this.tokenStatus,
       required this.updatedAt,
       required this.userType,
+       this.tokenNumber,
+      this.userName,
       this.user});
 
   factory ClinicToken.fromJson(Map<String, dynamic> json) => _$ClinicTokenFromJson(json);

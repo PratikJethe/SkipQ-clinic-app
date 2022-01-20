@@ -66,7 +66,7 @@ String? validateApartment(String? value) {
 
 String? validateCity(String? value) {
   if (value == null || value.trim().isEmpty) {
-    return 'city is required';
+    return 'City is required';
   }
   return null;
 }

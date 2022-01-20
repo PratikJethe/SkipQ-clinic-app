@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 OutlineInputBorder formEnabledBorder = OutlineInputBorder();
 
 OutlineInputBorder formErrorBorder = OutlineInputBorder(
-  borderSide: BorderSide(color: Colors.red, width: 1),
+  borderSide: BorderSide(color: Colors.red.shade700, width: 1),
 );
 
 OutlineInputBorder formBorder = OutlineInputBorder(

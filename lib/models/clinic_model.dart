@@ -22,15 +22,12 @@ class Clinic extends ChangeNotifier {
   String? email;
   Contact contact;
   String? profilePicUrl;
+  String? notice;
   @JsonKey(name: 'dateOfBirth', fromJson: utcToLocalOptional)
   DateTime? dob;
   bool isVerified;
   List<String> speciality;
-  bool isSubscribed;
-  @JsonKey(fromJson: utcToLocal)
-  DateTime subStartDate;
-  @JsonKey(fromJson: utcToLocal)
-  DateTime subEndDate;
+  
   bool hasClinicStarted;
 
   Clinic({
@@ -40,15 +37,13 @@ class Clinic extends ChangeNotifier {
     required this.fcm,
     required this.doctorName,
     required this.hasClinicStarted,
-    required this.isSubscribed,
     required this.isVerified,
     required this.speciality,
-    required this.subEndDate,
-    required this.subStartDate,
     required this.address,
     required this.contact,
     this.gender,
     this.email,
+    this.notice,
     this.profilePicUrl,
     this.dob,
   });
