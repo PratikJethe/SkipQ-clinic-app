@@ -45,6 +45,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/google-services.json
 
 # Env files
-/lib/config/app_config.json
+/config/config.json
