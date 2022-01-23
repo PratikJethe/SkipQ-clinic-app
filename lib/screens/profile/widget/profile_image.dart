@@ -1,4 +1,5 @@
 import 'package:booktokenclinicapp/providers/clinic_provider.dart';
+import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,17 +17,27 @@ class _DoctorProfileWidgetState extends State<DoctorProfileWidget> {
   Widget build(BuildContext context) {
     return Consumer<ClinicProvider>(builder: (context, clinicProvider, _) {
       return Container(
-    
           width: widget.width ?? 60,
           height: widget.height ?? 100,
           clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(10)),
           child: clinicProvider.clinic.profilePicUrl != null
               ? Image.network(
                   clinicProvider.clinic.profilePicUrl!,
                   fit: BoxFit.cover,
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                                                  color: R.color.primaryL1,
+
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, _, __) => Icon(Icons.error),
                 )
               : FittedBox(
                   fit: BoxFit.contain,
@@ -63,6 +74,18 @@ class UserProfileWidget extends StatelessWidget {
             ? Image.network(
                 url!,
                 fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                                                color: R.color.primaryL1,
+
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
                 errorBuilder: (context, _, __) => errorWidget ?? Icon(Icons.error),
               )
             : FittedBox(

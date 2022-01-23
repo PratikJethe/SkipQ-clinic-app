@@ -53,6 +53,13 @@ class ClinicProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<ApiResponse> getSpecialities() async {
+
+    ApiResponse response = await _apiService.get('/clinic/auth/get-specialities');
+
+    return response;
+  }
+
   Future getClinic(BuildContext context) async {
     List<Cookie> cookiesList = await _apiService.getCookies();
     if (cookiesList.length == 0) {
@@ -164,7 +171,7 @@ class ClinicProvider extends ChangeNotifier {
       setisRequestLoading = true;
     }
     ServiceResponse serviceResponse = await _clinicService.getRequests();
-        hasRequestError = false;
+    hasRequestError = false;
 
     setisRequestLoading = false;
     clinicRequestedTokenList.clear();

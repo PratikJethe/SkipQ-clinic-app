@@ -14,6 +14,7 @@ import 'package:booktokenclinicapp/models/clinic_model.dart';
 import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:booktokenclinicapp/screens/authentication/registration_screen.dart';
+import 'package:booktokenclinicapp/screens/modal-screen/modal_loading_screen.dart';
 import 'package:booktokenclinicapp/screens/profile/widget/profile_image.dart';
 import 'package:booktokenclinicapp/service/firebase_services/firebase_storage_service.dart';
 import 'package:booktokenclinicapp/service/image_service/image_service.dart';
@@ -46,186 +47,188 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: backArrowAppbar(context),
-      // drawer: UserDrawer(),
-      body: SafeArea(
-        child: Consumer<ClinicProvider>(builder: (context, clinicProvider, _) {
-          // print(clinicProvider.clinic.dob);
-          return Center(
-            child: Container(
-              // margin: EdgeInsets.only(top: 20),
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      // height: MediaQuery.of(context).size.height*0.9,
-                      child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                try {
-                                  PicType? picType = await _showBottomSheet(clinicProvider.clinic.id);
-
-                                  print(picType);
-
-                                  String? url;
-                                  clinicProvider.setShowModalLoading = true;
-                                  if (picType == PicType.CAMERA) {
-                                    url = await _updateProfilePic(ImageSource.camera, clinicProvider.clinic.id);
-
-                                    if (url == null) {
+    return ModalLoadingScreen(
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: backArrowAppbar(context),
+        // drawer: UserDrawer(),
+        body: SafeArea(
+          child: Consumer<ClinicProvider>(builder: (context, clinicProvider, _) {
+            // print(clinicProvider.clinic.dob);
+            return Center(
+              child: Container(
+                // margin: EdgeInsets.only(top: 20),
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        // height: MediaQuery.of(context).size.height*0.9,
+                        child: SingleChildScrollView(
+                          physics: BouncingScrollPhysics(),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  try {
+                                    PicType? picType = await _showBottomSheet(clinicProvider.clinic.id);
+    
+                                    print(picType);
+    
+                                    String? url;
+                                    clinicProvider.setShowModalLoading = true;
+                                    if (picType == PicType.CAMERA) {
+                                      url = await _updateProfilePic(ImageSource.camera, clinicProvider.clinic.id);
+    
+                                      if (url == null) {
+                                        clinicProvider.setShowModalLoading = false;
+                                        return;
+                                      }
+                                    } else if (picType == PicType.GALLERY) {
+                                      url = await _updateProfilePic(ImageSource.gallery, clinicProvider.clinic.id);
+                                      if (url == null) {
+                                        clinicProvider.setShowModalLoading = false;
+    
+                                        return;
+                                      }
+                                    } else if (picType == PicType.REMOVE) {
+    
+                                      url = null;
+                                    } else {
                                       clinicProvider.setShowModalLoading = false;
+    
                                       return;
                                     }
-                                  } else if (picType == PicType.GALLERY) {
-                                    url = await _updateProfilePic(ImageSource.gallery, clinicProvider.clinic.id);
-                                    if (url == null) {
-                                      clinicProvider.setShowModalLoading = false;
-
-                                      return;
+                                    Clinic clinic = clinicProvider.clinic;
+                                    Map<String, dynamic> payload = {
+                                      "doctorName": clinic.doctorName,
+                                      "pincode": clinic.address.pincode,
+                                      "address": clinic.address.address,
+                                      "apartment": clinic.address.apartment,
+                                      "gender": clinic.gender == null ? null : clinic.gender.toString().split('.').last,
+                                      "city": clinic.address.city,
+                                      "dateOfBirth": clinic.dob?.toIso8601String(),
+                                      "coordinates": clinic.address.coordinates,
+                                      "speciality": clinic.speciality,
+                                      "clinicName": clinic.clinicName,
+                                      "profilePicUrl": url
+                                    };
+    
+                                    print(payload);
+    
+                                    payload.removeWhere((key, value) => value == null);
+                                    ServiceResponse serviceResponse = await clinicProvider.updateClinic(payload);
+    
+                                    if (!serviceResponse.apiResponse.error) {
+                                      Fluttertoast.showToast(
+                                          msg: 'Image succesfully updated',
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 2,
+                                          fontSize: 16.0);
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: serviceResponse.apiResponse.errMsg,
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 2,
+                                          fontSize: 16.0);
                                     }
-                                  } else if (picType == PicType.REMOVE) {
-
-                                    url = null;
-                                  } else {
                                     clinicProvider.setShowModalLoading = false;
-
-                                    return;
-                                  }
-                                  Clinic clinic = clinicProvider.clinic;
-                                  Map<String, dynamic> payload = {
-                                    "doctorName": clinic.doctorName,
-                                    "pincode": clinic.address.pincode,
-                                    "address": clinic.address.address,
-                                    "apartment": clinic.address.apartment,
-                                    "gender": clinic.gender == null ? null : clinic.gender.toString().split('.').last,
-                                    "city": clinic.address.city,
-                                    "dateOfBirth": clinic.dob?.toIso8601String(),
-                                    "coordinates": clinic.address.coordinates,
-                                    "speciality": clinic.speciality,
-                                    "clinicName": clinic.clinicName,
-                                    "profilePicUrl": url
-                                  };
-
-                                  print(payload);
-
-                                  payload.removeWhere((key, value) => value == null);
-                                  ServiceResponse serviceResponse = await clinicProvider.updateClinic(payload);
-
-                                  if (!serviceResponse.apiResponse.error) {
+                                  } catch (e) {
+                                    clinicProvider.setShowModalLoading = false;
+    
+                                    print(e);
                                     Fluttertoast.showToast(
-                                        msg: 'Image succesfully updated',
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 2,
-                                        fontSize: 16.0);
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg: serviceResponse.apiResponse.errMsg,
+                                        msg: 'Something went wong. try again!',
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         timeInSecForIosWeb: 2,
                                         fontSize: 16.0);
                                   }
-                                  clinicProvider.setShowModalLoading = false;
-                                } catch (e) {
-                                  clinicProvider.setShowModalLoading = false;
-
-                                  print(e);
-                                  Fluttertoast.showToast(
-                                      msg: 'Something went wong. try again!',
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 2,
-                                      fontSize: 16.0);
-                                }
-                              },
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    DoctorProfileWidget(
-                                      width: MediaQuery.of(context).size.width * 0.25,
-                                      height: MediaQuery.of(context).size.height * 0.15,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width * 0.5,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        // mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Name',
-                                            style: R.styles.fz16Fw700,
-                                          ),
-                                          Text(clinicProvider.clinic.doctorName, style: R.styles.fz16FontColorPrimary)
-                                        ],
+                                },
+                                child: Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      DoctorProfileWidget(
+                                        width: MediaQuery.of(context).size.width * 0.25,
+                                        height: MediaQuery.of(context).size.height * 0.15,
                                       ),
-                                    ),
-                                    Spacer()
-                                  ],
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width * 0.5,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          // mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Name',
+                                              style: R.styles.fz16Fw700,
+                                            ),
+                                            Text(clinicProvider.clinic.doctorName, style: R.styles.fz16FontColorPrimary)
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer()
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            infoTile('Contact', '+${clinicProvider.clinic.contact.dialCode} ${clinicProvider.clinic.contact.phoneNo}'),
-                            infoTile('Email', clinicProvider.clinic.email),
-                            speciailty('Specialities', clinicProvider.clinic.speciality),
-                            infoTile('Address', clinicProvider.clinic.address.address),
-                            infoTile('Apartment', clinicProvider.clinic.address.apartment),
-                            infoTile('City', clinicProvider.clinic.address.city),
-                            infoTile('Pincode', clinicProvider.clinic.address.pincode),
-                            infoTile('Gender', clinicProvider.clinic.gender != null ? clinicProvider.clinic.gender.toString().split('.').last : null),
-                            infoTile(
-                                'Date of Birth',
-                                clinicProvider.clinic.dob != null
-                                    ? '${clinicProvider.clinic.dob!.day}/${clinicProvider.clinic.dob!.month}/${clinicProvider.clinic.dob!.year}'
-                                    : null),
-                            SizedBox(
-                              height: 0,
-                            ),
-                          ],
+                              infoTile('Contact', '+${clinicProvider.clinic.contact.dialCode} ${clinicProvider.clinic.contact.phoneNo}'),
+                              infoTile('Email', clinicProvider.clinic.email),
+                              speciailty('Specialities', clinicProvider.clinic.speciality),
+                              infoTile('Address', clinicProvider.clinic.address.address),
+                              infoTile('Apartment', clinicProvider.clinic.address.apartment),
+                              infoTile('City', clinicProvider.clinic.address.city),
+                              infoTile('Pincode', clinicProvider.clinic.address.pincode),
+                              infoTile('Gender', clinicProvider.clinic.gender != null ? clinicProvider.clinic.gender.toString().split('.').last : null),
+                              infoTile(
+                                  'Date of Birth',
+                                  clinicProvider.clinic.dob != null
+                                      ? '${clinicProvider.clinic.dob!.day}/${clinicProvider.clinic.dob!.month}/${clinicProvider.clinic.dob!.year}'
+                                      : null),
+                              SizedBox(
+                                height: 0,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => RegistrationScreen(
-                                  isUpdateProfile: true,
-                                  clinicProvider: clinicProvider,
-                                )));
-                      },
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(R.color.primaryL1)),
-                      child: Text(
-                        'Edit Profile',
-                        style: R.styles.fontColorWhite,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => RegistrationScreen(
+                                    isUpdateProfile: true,
+                                    clinicProvider: clinicProvider,
+                                  )));
+                        },
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(R.color.primaryL1)),
+                        child: Text(
+                          'Edit Profile',
+                          style: R.styles.fontColorWhite,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

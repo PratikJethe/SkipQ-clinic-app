@@ -34,7 +34,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               future: ClinicService().getSubscriptionDetails(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: R.color.primaryL1,
+                  ));
                 }
 
                 if (snapshot.hasError || snapshot.data!.apiResponse.error) {
@@ -56,9 +59,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 backgroundColor: MaterialStateProperty.all(R.color.primary),
                               ),
                               onPressed: () async {
-                               setState(() {
-                                 
-                               });
+                                setState(() {});
                               },
                               child: Text(
                                 'Retry',

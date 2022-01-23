@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:booktokenclinicapp/models/api_response_model.dart';
 import 'package:booktokenclinicapp/models/notification/notification_model.dart';
+import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:booktokenclinicapp/screens/notification/widget/notification_tile.dart';
 import 'package:booktokenclinicapp/service/clinic/clinic_service.dart';
 import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
@@ -86,7 +87,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           ),
                           if (isPaginating && index == notificationList.length - 1)
                             Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                                          color: R.color.primaryL1,
+
+                              ),
                             )
                         ],
                       );
@@ -94,7 +98,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     itemCount: notificationList.length,
                   )
             : Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                                            color: R.color.primaryL1,
+
+                ),
               ));
   }
 }

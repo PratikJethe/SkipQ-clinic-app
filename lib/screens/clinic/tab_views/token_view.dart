@@ -98,7 +98,9 @@ class _ClinicTokenViewState extends State<ClinicTokenView> with AutomaticKeepAli
                   ]))
                 : clinicProvider.isLoadingTokens
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: R.color.primaryL1,
+                        ),
                       )
                     : clinicProvider.hasTokenError
                         ? Center(
@@ -224,81 +226,84 @@ class _ClinicTokenViewState extends State<ClinicTokenView> with AutomaticKeepAli
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
         context: context,
         builder: (cotext) {
-          return Material(
-            child: StatefulBuilder(builder: (context, setState) {
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  SizedBox(height: 30),
-                  Text(
-                    'Name of Patient (optional)',
-                    style: R.styles.fz18Fw500,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 60,
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      textAlignVertical: TextAlignVertical.center,
-                      // cursorHeight: 40,
-                      cursorColor: R.color.primary,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsetsDirectional.zero,
-                        enabledBorder: formBorder,
-                        disabledBorder: formBorder,
-                        errorBorder: formBorder,
-                        focusedBorder: formBorder,
-                        border: formBorder,
-                      ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty) {
-                          name = value;
-                        } else {
-                          name = null;
-                        }
-                      },
+          return
+              //  Material(
+              //   clipBehavior: Clip.hardEdge,
+              //   child:
+              StatefulBuilder(builder: (context, setState) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                SizedBox(height: 30),
+                Text(
+                  'Name of Patient (optional)',
+                  style: R.styles.fz18Fw500,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 60,
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    textAlignVertical: TextAlignVertical.center,
+                    // cursorHeight: 40,
+                    cursorColor: R.color.primary,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsetsDirectional.zero,
+                      enabledBorder: formBorder,
+                      disabledBorder: formBorder,
+                      errorBorder: formBorder,
+                      focusedBorder: formBorder,
+                      border: formBorder,
                     ),
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        name = value;
+                      } else {
+                        name = null;
+                      }
+                    },
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        child: TextButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(R.color.primary)),
-                            onPressed: () {
-                              Navigator.of(context).pop({'proceed': true, 'name': name});
-                            },
-                            child: Text(
-                              'Proceed',
-                              style: R.styles.fz18Fw500.merge(R.styles.fontColorWhite),
-                            )),
-                      ),
-                      SizedBox(
-                        width: 40,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        child: TextButton(
-                            style: OutlinedButton.styleFrom(side: BorderSide(color: R.color.primary)),
-                            onPressed: () {
-                              Navigator.of(context).pop({'proceed': false, 'name': name});
-                            },
-                            child: Text('Cancel', style: R.styles.fz18Fw500.merge(R.styles.fontColorPrimary))),
-                      ),
-                    ],
-                  )
-                ]),
-              );
-            }),
-          );
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: TextButton(
+                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(R.color.primary)),
+                          onPressed: () {
+                            Navigator.of(context).pop({'proceed': true, 'name': name});
+                          },
+                          child: Text(
+                            'Proceed',
+                            style: R.styles.fz18Fw500.merge(R.styles.fontColorWhite),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 40,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: TextButton(
+                          style: OutlinedButton.styleFrom(side: BorderSide(color: R.color.primary)),
+                          onPressed: () {
+                            Navigator.of(context).pop({'proceed': false, 'name': name});
+                          },
+                          child: Text('Cancel', style: R.styles.fz18Fw500.merge(R.styles.fontColorPrimary))),
+                    ),
+                  ],
+                )
+              ]),
+            );
+          });
+          // );
         });
   }
 

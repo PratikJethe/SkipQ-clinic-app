@@ -57,6 +57,8 @@ dependencies:
   webview_flutter: ^3.0.0
   awesome_notifications: ^0.6.20
   page_view_indicators: ^2.0.0
+  flutter_email_sender: ^5.0.2
+  share: ^2.0.4
 
 
 dev_dependencies:

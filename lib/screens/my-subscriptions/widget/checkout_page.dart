@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:booktokenclinicapp/config/app_config.dart';
 import 'package:booktokenclinicapp/constants/api_constant.dart';
 import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:booktokenclinicapp/service/api_service.dart';
@@ -22,6 +23,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   bool showSuccess = false;
   bool showFailure = false;
+  AppConfig _appConfig = getIt.get<AppConfig>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,10 +40,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('${_appConfig.endPoint}/clinic/transaction/get-payment-checkout?planId=${widget.planId}');
     return Scaffold(
       body: cookies.length == 0
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: R.color.primaryL1,
+              ),
             )
           : showSuccess
               ? ResultTile(isSuccess: true)
@@ -50,8 +56,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     )
                   : WebView(
                       javascriptMode: JavascriptMode.unrestricted,
-                      initialCookies: [...cookies.map((cookie) => WebViewCookie(name: cookie.name, value: cookie.value, domain: domainUrl))],
-                      initialUrl: '${baseUrl}/clinic/transaction/get-payment-checkout?planId=${widget.planId}',
+                      initialCookies: [...cookies.map((cookie) => WebViewCookie(name: cookie.name, value: cookie.value, domain: _appConfig.baseUrl))],
+                      initialUrl: '${_appConfig.endPoint}/clinic/transaction/get-payment-checkout?planId=${widget.planId}',
                       navigationDelegate: (navigation) {
                         print(navigation.url);
                         print(navigation.url.contains('success'));

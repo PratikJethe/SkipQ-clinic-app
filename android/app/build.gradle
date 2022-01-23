@@ -50,6 +50,20 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    flavorDimensions "BOT-Clinic"
+    productFlavors {
+         dev {
+            dimension "BOT-Clinic"
+            resValue "string", "app_name", "BOT-Clinic-DEV"
+        }
+       
+        prod {
+            dimension "BOT-Clinic"
+            applicationIdSuffix ".prod"
+            resValue "string", "app_name", "BOT-Clinic"
+            versionNameSuffix ".prod"
+        }
+    }
 
     buildTypes {
         release {

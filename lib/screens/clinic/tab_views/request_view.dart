@@ -90,7 +90,9 @@ class _CllinicRequestViewState extends State<CllinicRequestView> {
                   ]))
                 : clinicProvider.isLoadingRequest
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: R.color.primaryL1,
+                        ),
                       )
                     : clinicProvider.hasRequestError
                         ? Center(

@@ -8,7 +8,9 @@ import 'package:booktokenclinicapp/screens/notice/notice_screen.dart';
 import 'package:booktokenclinicapp/screens/profile/profile_screen.dart';
 import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -50,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     'View Profile',
                     style: R.styles.fz16Fw500,
                   ),
-                  subtitle: Text('view/edit profile'),
+                  subtitle: Text('View/Edit profile'),
                 ),
                 Divider(
                   height: 2,
@@ -68,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Notice',
                     style: R.styles.fz16Fw500,
                   ),
-                  subtitle: Text('view/edit notice'),
+                  subtitle: Text('View/Edit notice'),
                 ),
                 Divider(
                   height: 2,
@@ -86,8 +88,48 @@ class _ProfilePageState extends State<ProfilePage> {
                     'My Subscriptions',
                     style: R.styles.fz16Fw500,
                   ),
-                  subtitle: Text('view subscription and plans'),
+                  subtitle: Text('View subscription and plans'),
                 ),
+                Divider(
+                  height: 2,
+                  thickness: 1,
+                ),
+                ListTile(
+                    onTap: () async {
+                      final Email email = Email(
+                        recipients: ['booktokenhelp@gmail.com'],
+                        isHTML: false,
+                      );
+
+                      await FlutterEmailSender.send(email);
+                    },
+                    leading: Icon(
+                      Icons.help_outline_rounded,
+                      size: 40,
+                    ),
+                    title: Text(
+                      'Help',
+                      style: R.styles.fz16Fw500,
+                    ),
+                    subtitle: Text('Need help? mail us')),
+                Divider(
+                  height: 2,
+                  thickness: 1,
+                ),
+                ListTile(
+                    onTap: () {
+                      Share.share(
+                          'check out this app which helps you to manage your clinic tokens online and helps patients to save time and efforts \n https://play.google.com/store/apps/details?id=com.company.booktoken');
+                    },
+                    leading: Icon(
+                      Icons.share,
+                      size: 40,
+                    ),
+                    title: Text(
+                      'Share',
+                      style: R.styles.fz16Fw500,
+                    ),
+                    subtitle: Text('Help us to increase our reach')),
                 Divider(
                   height: 2,
                   thickness: 1,

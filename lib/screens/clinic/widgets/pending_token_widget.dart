@@ -96,7 +96,7 @@ class _PendingTokenWidgetState extends State<PendingTokenWidget> {
                           height: 3,
                         ),
                         Text(
-                          '${ clinicToken.isOnline? clinicToken.user!.fullName : clinicToken.userName??'No Name'}',
+                          '${clinicToken.isOnline ? clinicToken.user!.fullName : clinicToken.userName ?? 'No Name'}',
                           style: R.styles.fz16Fw700,
                           maxLines: 1,
                           softWrap: false,
@@ -125,25 +125,26 @@ class _PendingTokenWidgetState extends State<PendingTokenWidget> {
                                       padding: MaterialStateProperty.all(EdgeInsets.zero),
                                       visualDensity: VisualDensity(vertical: 0, horizontal: 0)),
                                   onPressed: () async {
-                                    ClinicProvider clinicProvider = Provider.of<ClinicProvider>(context, listen: false);
-                                    clinicProvider.setShowModalLoading = true;
+                                    showAlertBoxTokenAction('Mark this token as done?', 'Done', () async {
+                                      ClinicProvider clinicProvider = Provider.of<ClinicProvider>(context, listen: false);
+                                      clinicProvider.setShowModalLoading = true;
 
-                                    ServiceResponse serviceResponse =
-                                        await clinicProvider.completeToken(clinicToken.id);
-                                    if (serviceResponse.apiResponse.error) {
-                                      Fluttertoast.showToast(
-                                          msg: serviceResponse.apiResponse.errMsg,
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 2,
-                                          fontSize: 16.0);
-                                     clinicProvider.setShowModalLoading = false;
+                                      ServiceResponse serviceResponse = await clinicProvider.completeToken(clinicToken.id);
+                                      if (serviceResponse.apiResponse.error) {
+                                        Fluttertoast.showToast(
+                                            msg: serviceResponse.apiResponse.errMsg,
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 2,
+                                            fontSize: 16.0);
+                                        clinicProvider.setShowModalLoading = false;
 
-                                      return;
-                                    }
+                                        return;
+                                      }
 
-                                    await clinicProvider.getPendingTokens(showLoading: true);
-                                   clinicProvider.setShowModalLoading = false;
+                                      await clinicProvider.getPendingTokens(showLoading: true);
+                                      clinicProvider.setShowModalLoading = false;
+                                    }, context);
                                   },
                                   child: Text(
                                     'Done',
@@ -160,12 +161,11 @@ class _PendingTokenWidgetState extends State<PendingTokenWidget> {
                                     onPressed: () {
                                       print(clinicToken.tokenStatus);
                                       showAlertBoxTokenAction('Are you sure you want to Discard this token?', 'Discard', () async {
-                                                                            ClinicProvider clinicProvider = Provider.of<ClinicProvider>(context, listen: false);
+                                        ClinicProvider clinicProvider = Provider.of<ClinicProvider>(context, listen: false);
 
                                         clinicProvider.setShowModalLoading = true;
 
-                                        ServiceResponse serviceResponse =
-                                            await clinicProvider.discardToken(clinicToken.id);
+                                        ServiceResponse serviceResponse = await clinicProvider.discardToken(clinicToken.id);
                                         if (serviceResponse.apiResponse.error) {
                                           Fluttertoast.showToast(
                                               msg: serviceResponse.apiResponse.errMsg,

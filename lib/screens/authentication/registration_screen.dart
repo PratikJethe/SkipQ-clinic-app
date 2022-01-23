@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:booktokenclinicapp/config/config.dart';
+import 'package:booktokenclinicapp/config/app_config.dart';
 import 'package:booktokenclinicapp/constants/api_constant.dart';
 import 'package:booktokenclinicapp/main.dart';
 import 'package:booktokenclinicapp/models/api_response_model.dart';
@@ -20,7 +20,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:provider/provider.dart';
 
-GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: Config.autocompleteApiKey);
+AppConfig _appConfig = getIt.get<AppConfig>();
+
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: _appConfig.googleMapApiKeys);
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key, this.uid, this.mobileNumber, this.isUpdateProfile, this.clinicProvider}) : super(key: key);
@@ -55,6 +57,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   ClinicProvider? clinicProvider;
   bool? isUpdateProfile;
   String specialityFilterString = '';
+  bool isSpecialityLoading = true;
+  bool errorSpecialityLoading = false;
 
   String? name, email, address, apartment, pincode, dob, gender = '', city, clinicName;
   List<String> genderList = ['MALE', 'FEMALE', 'OTHER', ''];
@@ -62,6 +66,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   FcmService _fcmService = getIt.get<FcmService>();
   DateTime? selectedDate;
   DateTime initialDate = DateTime(DateTime.now().year - 10, 12, 31);
+
+  List<dynamic> doctorSpeciality = [];
 
   bool errorInSpeciality = false;
 
@@ -87,6 +93,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   _updateUi() {
     setState(() {});
+  }
+
+  _loadSpeciality() async {
+    ApiResponse response = await Provider.of<ClinicProvider>(context, listen: false).getSpecialities();
+
+    if (response.error) {
+      errorSpecialityLoading = true;
+      isSpecialityLoading = false;
+    } else {
+      errorSpecialityLoading = false;
+      isSpecialityLoading = false;
+
+      doctorSpeciality = response.data.toList().cast<String>();
+
+      if (isUpdateProfile = true) {
+        selecetdSepaciality = selecetdSepaciality.where((selected) => doctorSpeciality.contains(selected)).toList();
+      }
+    }
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -135,6 +162,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
 
     _mobileNumberController.text = mobileNumber.toString();
+
+    _loadSpeciality();
   }
 
   @override
@@ -158,607 +187,643 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return ModalLoadingScreen(
       child: Scaffold(
         appBar: backArrowAppbar(context),
-        body: Consumer<ClinicProvider>(
-          builder: (context, clinicProvider, _) => SingleChildScrollView(
-            child: Container(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextInputComponent(
-                        'Doctor\'s Name',
-                        TextFormField(
-                          maxLength: 30,
-                          controller: _fullNameController,
-                          onChanged: (value) {
-                            setState(() {
-                              name = value.trim();
-                            });
-                          },
-                          cursorColor: R.color.primary,
-                          cursorHeight: 25,
-                          decoration: InputDecoration(
+        body: isSpecialityLoading
+            ? Center(child: CircularProgressIndicator(
+              color: R.color.primaryL1,
+            ))
+            : errorSpecialityLoading
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Something Went Wrong!..Try again',
+                          style: R.styles.fz18Fw500,
+                        ),
+                        SizedBox(height: 20),
+                        SizedBox(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            child: TextButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(R.color.primary),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  isSpecialityLoading = true;
+                                  errorSpecialityLoading = false;
+                                });
+                                _loadSpeciality();
+                              },
+                              child: Text(
+                                'Retry',
+                                style: R.styles.fontColorWhite.merge(R.styles.fz16Fw500),
+                              ),
+                            ))
+                      ],
+                    ),
+                  )
+                : Consumer<ClinicProvider>(
+                    builder: (context, clinicProvider, _) => SingleChildScrollView(
+                      child: Container(
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              TextInputComponent(
+                                  'Doctor\'s Name',
+                                  TextFormField(
+                                    maxLength: 30,
+                                    controller: _fullNameController,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        name = value.trim();
+                                      });
+                                    },
+                                    cursorColor: R.color.primary,
+                                    cursorHeight: 25,
+                                    decoration: InputDecoration(
+                                        prefixIconConstraints: BoxConstraints(minHeight: 30, maxWidth: 50, maxHeight: 30),
+                                        prefixIcon: Container(
+                                            margin: EdgeInsets.only(right: 8),
+                                            decoration: BoxDecoration(
+                                              border: Border(right: BorderSide(color: R.color.black)),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              'Dr.',
+                                              style: R.styles.fz16Fw500,
+                                            ))),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                        enabledBorder: formBorder,
+                                        errorStyle: errorTextStyle,
+                                        focusedBorder: formBorder,
+                                        errorBorder: formErrorBorder,
+                                        focusedErrorBorder: formErrorBorder),
+                                    validator: validateDoctorName,
+                                  ),
+                                  true),
+                              TextInputComponent(
+                                  'Clinic\'s Name',
+                                  TextFormField(
+                                    maxLength: 30,
+                                    cursorColor: R.color.primary,
+                                    cursorHeight: 25,
+                                    controller: _clinicNameController,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        clinicName = value.trim();
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                        enabledBorder: formBorder,
+                                        errorStyle: errorTextStyle,
+                                        focusedBorder: formBorder,
+                                        errorBorder: formErrorBorder,
+                                        focusedErrorBorder: formErrorBorder),
+                                    validator: validateClinicName,
+                                  ),
+                                  true),
+                              TextInputComponent(
+                                  'Contact',
+                                  TextFormField(
+                                    style: R.styles.fz16Fw500,
+                                    cursorColor: R.color.primary,
+                                    cursorHeight: 25,
+                                    decoration: InputDecoration(
+                                      enabledBorder: formBorder,
+                                      errorStyle: errorTextStyle,
+                                      focusedBorder: formBorder,
+                                      disabledBorder: formBorder,
+                                      errorBorder: formErrorBorder,
+                                      focusedErrorBorder: formErrorBorder,
                                       prefixIconConstraints: BoxConstraints(minHeight: 30, maxWidth: 50, maxHeight: 30),
-                            prefixIcon: Container(
-                                margin: EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  border: Border(right: BorderSide(color: R.color.black)),
+                                      prefixIcon: Container(
+                                          margin: EdgeInsets.only(right: 8),
+                                          decoration: BoxDecoration(
+                                            border: Border(right: BorderSide(color: R.color.black)),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                            '+91',
+                                            style: R.styles.fz16Fw500,
+                                          ))),
+                                    ),
+                                    controller: _mobileNumberController,
+                                    enabled: false,
+                                  ),
+                                  true),
+
+                              if (isUpdateProfile != true)
+                                TextInputComponent(
+                                    'Email',
+                                    TextFormField(
+                                      cursorColor: R.color.primary,
+                                      cursorHeight: 25,
+                                      maxLength: 40,
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                          enabledBorder: formBorder,
+                                          errorStyle: errorTextStyle,
+                                          focusedBorder: formBorder,
+                                          errorBorder: formErrorBorder,
+                                          focusedErrorBorder: formErrorBorder),
+                                      controller: _emailController,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          email = value.trim();
+                                        });
+                                      },
+                                      validator: validateEmail,
+                                    ),
+                                    false),
+                              // TextInputComponent('Full name', TextFormField(), true),  reserverd for address via google api
+
+                              TextInputComponent(
+                                  'Pincode',
+                                  TextFormField(
+                                    controller: _pincodeController,
+                                    cursorColor: R.color.primary,
+                                    cursorHeight: 25,
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                        enabledBorder: formBorder,
+                                        errorStyle: errorTextStyle,
+                                        focusedBorder: formBorder,
+                                        errorBorder: formErrorBorder,
+                                        focusedErrorBorder: formErrorBorder),
+                                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        pincode = value.trim();
+                                      });
+                                    },
+                                    validator: validatePincode,
+                                  ),
+                                  false), // auto filled or manual
+                              GestureDetector(
+                                onTap: () async {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+
+                                  onError(res) {
+                                    print(res);
+                                    Fluttertoast.showToast(msg: "something went wrong. check your internet connection", gravity: ToastGravity.BOTTOM);
+                                  }
+
+                                  Prediction? prediction = await PlacesAutocomplete.show(
+                                    context: context,
+                                    mode: Mode.overlay,
+                                    apiKey: _appConfig.googleMapApiKeys,
+                                    components: [],
+                                    types: [],
+                                    onError: onError,
+                                    strictbounds: false,
+                                    hint: "Search address",
+                                  );
+
+                                  if (prediction == null) {
+                                    address = null;
+                                    _addressController.clear();
+                                    coordinates = [];
+                                    setState(() {});
+                                    return;
+                                  }
+
+                                  print(prediction.description);
+                                  _addressController.text = prediction.description!;
+                                  address = prediction.description!;
+
+                                  PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(prediction.placeId!);
+                                  final lat = detail.result.geometry?.location.lat;
+                                  final lng = detail.result.geometry?.location.lng;
+
+                                  if (lat != null && lng != null) {
+                                    coordinates = [lng, lat];
+                                    print(coordinates);
+                                  }
+                                },
+                                child: TextInputComponent(
+                                  'Address',
+                                  TextFormField(
+                                    enabled: false,
+                                    cursorColor: R.color.primary,
+                                    cursorHeight: 25,
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                        enabledBorder: formBorder,
+                                        errorStyle: errorTextStyle,
+                                        focusedBorder: formBorder,
+                                        disabledBorder: formBorder,
+                                        errorBorder: formErrorBorder,
+                                        focusedErrorBorder: formErrorBorder),
+                                    controller: _addressController,
+                                    validator: validateAddress,
+                                  ),
+                                  true,
                                 ),
-                                child: Center(
-                                    child: Text(
-                                  'Dr.',
-                                  style: R.styles.fz16Fw500,
-                                ))),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                              enabledBorder: formBorder,
-                              errorStyle: errorTextStyle,
-                              focusedBorder: formBorder,
-                              errorBorder: formErrorBorder,
-                              focusedErrorBorder: formErrorBorder),
-                          validator: validateDoctorName,
-                        ),
-                        true),
-                    TextInputComponent(
-                        'Clinic\'s Name',
-                        TextFormField(
-                          maxLength: 30,
-                          cursorColor: R.color.primary,
-                          cursorHeight: 25,
-                          controller: _clinicNameController,
-                          onChanged: (value) {
-                            setState(() {
-                              clinicName = value.trim();
-                            });
-                          },
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                              enabledBorder: formBorder,
-                              errorStyle: errorTextStyle,
-                              focusedBorder: formBorder,
-                              errorBorder: formErrorBorder,
-                              focusedErrorBorder: formErrorBorder),
-                          validator: validateClinicName,
-                        ),
-                        true),
-                    TextInputComponent(
-                        'Contact',
-                        TextFormField(
-                          style: R.styles.fz16Fw500,
-                          cursorColor: R.color.primary,
-                          cursorHeight: 25,
-                          decoration: InputDecoration(
-                            enabledBorder: formBorder,
-                            errorStyle: errorTextStyle,
-                            focusedBorder: formBorder,
-                            disabledBorder: formBorder,
-                            errorBorder: formErrorBorder,
-                            focusedErrorBorder: formErrorBorder,
-                            prefixIconConstraints: BoxConstraints(minHeight: 30, maxWidth: 50, maxHeight: 30),
-                            prefixIcon: Container(
-                                margin: EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  border: Border(right: BorderSide(color: R.color.black)),
+                              ), // auto filled or manual
+                              TextInputComponent(
+                                'Apartment',
+                                TextFormField(
+                                  maxLength: 60,
+                                  controller: _apartemntController,
+                                  cursorColor: R.color.primary,
+                                  cursorHeight: 25,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                      enabledBorder: formBorder,
+                                      errorStyle: errorTextStyle,
+                                      focusedBorder: formBorder,
+                                      errorBorder: formErrorBorder,
+                                      focusedErrorBorder: formErrorBorder),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      apartment = value.trim();
+                                    });
+                                  },
+                                  validator: validateApartment,
                                 ),
-                                child: Center(
-                                    child: Text(
-                                  '+91',
-                                  style: R.styles.fz16Fw500,
-                                ))),
-                          ),
-                          controller: _mobileNumberController,
-                          enabled: false,
-                        ),
-                        true),
-        
-                    if (isUpdateProfile != true)
-                      TextInputComponent(
-                          'Email',
-                          TextFormField(
-                            cursorColor: R.color.primary,
-                            cursorHeight: 25,
-                            maxLength: 40,
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                                enabledBorder: formBorder,
-                                errorStyle: errorTextStyle,
-                                focusedBorder: formBorder,
-                                errorBorder: formErrorBorder,
-                                focusedErrorBorder: formErrorBorder),
-                            controller: _emailController,
-                            onChanged: (value) {
-                              setState(() {
-                                email = value.trim();
-                              });
-                            },
-                            validator: validateEmail,
-                          ),
-                          false),
-                    // TextInputComponent('Full name', TextFormField(), true),  reserverd for address via google api
-        
-                    TextInputComponent(
-                        'Pincode',
-                        TextFormField(
-                          controller: _pincodeController,
-                          cursorColor: R.color.primary,
-                          cursorHeight: 25,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                              enabledBorder: formBorder,
-                              errorStyle: errorTextStyle,
-                              focusedBorder: formBorder,
-                              errorBorder: formErrorBorder,
-                              focusedErrorBorder: formErrorBorder),
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          onChanged: (value) {
-                            setState(() {
-                              pincode = value.trim();
-                            });
-                          },
-                          validator: validatePincode,
-                        ),
-                        false), // auto filled or manual
-                    GestureDetector(
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(FocusNode());
-        
-                        onError(res) {
-                          print(res);
-                          Fluttertoast.showToast(msg: "something went wrong. check your internet connection", gravity: ToastGravity.BOTTOM);
-                        }
-        
-                        Prediction? prediction = await PlacesAutocomplete.show(
-                          context: context,
-                          mode: Mode.overlay,
-                          apiKey: Config.autocompleteApiKey,
-                          components: [],
-                          types: [],
-                          onError: onError,
-                          strictbounds: false,
-                          hint: "Search address",
-                        );
-        
-                        if (prediction == null) {
-                          address = null;
-                          _addressController.clear();
-                          coordinates = [];
-                          setState(() {});
-                          return;
-                        }
-        
-                        print(prediction.description);
-                        _addressController.text = prediction.description!;
-                        address = prediction.description!;
-        
-                        PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(prediction.placeId!);
-                        final lat = detail.result.geometry?.location.lat;
-                        final lng = detail.result.geometry?.location.lng;
-        
-                        if (lat != null && lng != null) {
-                          coordinates = [lng, lat];
-                          print(coordinates);
-                        }
-                      },
-                      child: TextInputComponent(
-                        'Address',
-                        TextFormField(
-                          enabled: false,
-                          cursorColor: R.color.primary,
-                          cursorHeight: 25,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                              enabledBorder: formBorder,
-                              errorStyle: errorTextStyle,
-                              focusedBorder: formBorder,
-                              disabledBorder: formBorder,
-                              errorBorder: formErrorBorder,
-                              focusedErrorBorder: formErrorBorder),
-                          controller: _addressController,
-                          validator: validateAddress,
-                        ),
-                        true,
-                      ),
-                    ), // auto filled or manual
-                    TextInputComponent(
-                      'Apartment',
-                      TextFormField(
-                        maxLength: 60,
-                        controller: _apartemntController,
-                        cursorColor: R.color.primary,
-                        cursorHeight: 25,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                            enabledBorder: formBorder,
-                            errorStyle: errorTextStyle,
-                            focusedBorder: formBorder,
-                            errorBorder: formErrorBorder,
-                            focusedErrorBorder: formErrorBorder),
-                        onChanged: (value) {
-                          setState(() {
-                            apartment = value.trim();
-                          });
-                        },
-                        validator: validateApartment,
-                      ),
-                      false,
-                    ), // auto filled or manual
-                    TextInputComponent(
-                      'Speciality',
-                      GestureDetector(
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          // setState(() {
-                          //   specialityFilterString = "";
-                          // });
-                          await _showBottomSheet();
-                          _updateUi();
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: R.color.black)),
-                              width: double.infinity,
-                              constraints: BoxConstraints(minHeight: 50),
-                              child: selecetdSepaciality.length == 0
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'select speciality',
-                                            style: R.styles.fz16FontColorGrey,
-                                          )),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Wrap(
-                                        spacing: 10,
+                                false,
+                              ), // auto filled or manual
+                              TextInputComponent(
+                                'Speciality',
+                                GestureDetector(
+                                  onTap: () async {
+                                    FocusScope.of(context).requestFocus(FocusNode());
+                                    // setState(() {
+                                    //   specialityFilterString = "";
+                                    // });
+                                    await _showBottomSheet();
+                                    _updateUi();
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: R.color.black)),
+                                        width: double.infinity,
+                                        constraints: BoxConstraints(minHeight: 50),
+                                        child: selecetdSepaciality.length == 0
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(left: 5),
+                                                child: Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text(
+                                                      'select speciality',
+                                                      style: R.styles.fz16FontColorGrey,
+                                                    )),
+                                              )
+                                            : Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Wrap(
+                                                  spacing: 10,
+                                                  children: [
+                                                    ...selecetdSepaciality.map((e) => ActionChip(
+                                                        label: Text(e),
+                                                        onPressed: () async {
+                                                          FocusScope.of(context).requestFocus(FocusNode());
+                                                          // setState(() {
+                                                          //   specialityFilterString = "";
+                                                          // });
+                                                          await _showBottomSheet();
+                                                          _updateUi();
+                                                        }))
+                                                  ],
+                                                ),
+                                              ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      if (errorInSpeciality)
+                                        Text(
+                                          'minimum 1 and maximum 3 specialities are required',
+                                          style: errorTextStyle,
+                                        )
+                                    ],
+                                  ),
+                                ),
+                                true,
+                              ), // auto filled or manual
+                              GestureDetector(
+                                onTap: () async {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+
+                                  onError(res) {
+                                    print(res);
+                                    Fluttertoast.showToast(msg: "something went wrong. check your internet connection", gravity: ToastGravity.BOTTOM);
+                                  }
+
+                                  Prediction? prediction = await PlacesAutocomplete.show(
+                                    context: context,
+
+                                    mode: Mode.overlay,
+                                    apiKey: _appConfig.googleMapApiKeys,
+                                    // sessionToken: sessionToken,
+                                    components: [],
+                                    types: ['(cities)'],
+                                    onError: onError,
+                                    strictbounds: false,
+                                    hint: "Search City",
+                                  );
+
+                                  if (prediction == null) {
+                                    city = null;
+                                    _cityController.clear();
+                                    setState(() {});
+                                    return;
+                                  }
+
+                                  if (prediction.description != null) {
+                                    city = prediction.description!.split(',')[0].trim();
+                                    _cityController.text = city!;
+                                  }
+                                },
+                                child: TextInputComponent(
+                                  'City',
+                                  TextFormField(
+                                    enabled: false,
+                                    cursorColor: R.color.primary,
+                                    cursorHeight: 25,
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                        enabledBorder: formBorder,
+                                        errorStyle: errorTextStyle,
+                                        focusedBorder: formBorder,
+                                        disabledBorder: formBorder,
+                                        errorBorder: formErrorBorder,
+                                        focusedErrorBorder: formErrorBorder),
+                                    controller: _cityController,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        city = value.trim();
+                                      });
+                                    },
+                                    validator: validateCity,
+                                  ),
+                                  true,
+                                ),
+                              ), // auto filled or manual
+                              GestureDetector(
+                                onTap: () async {
+                                  await _selectDate(context);
+                                },
+                                child: TextInputComponent(
+                                  'Date of birth',
+                                  TextFormField(
+                                    controller: _dobController,
+                                    enabled: false,
+                                    cursorColor: R.color.primary,
+                                    cursorHeight: 25,
+                                    decoration: InputDecoration(
+                                        hintText: 'Select birth date',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                        enabledBorder: formBorder,
+                                        errorStyle: errorTextStyle,
+                                        focusedBorder: formBorder,
+                                        disabledBorder: formBorder,
+                                        errorBorder: formErrorBorder,
+                                        focusedErrorBorder: formErrorBorder),
+                                    onChanged: (value) {},
+                                  ),
+                                  false,
+                                ),
+                              ), // auto filled or manual
+
+                              TextInputComponent(
+                                  'Gender',
+                                  FittedBox(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Row(
                                         children: [
-                                          ...selecetdSepaciality.map((e) => ActionChip(
-                                              label: Text(e),
-                                              onPressed: () async {
-                                                FocusScope.of(context).requestFocus(FocusNode());
-                                                // setState(() {
-                                                //   specialityFilterString = "";
-                                                // });
-                                                await _showBottomSheet();
-                                                _updateUi();
-                                              }))
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Radio(
+                                                  fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                                  value: 'MALE',
+                                                  groupValue: gender,
+                                                  onChanged: (value) {
+                                                    print(value);
+                                                    gender = value.toString();
+                                                    setState(() {});
+                                                  }),
+                                              Text('Male')
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Radio(
+                                                  fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                                  value: 'FEMALE',
+                                                  groupValue: gender,
+                                                  onChanged: (value) {
+                                                    print(value);
+                                                    setState(() {});
+                                                    gender = value.toString();
+                                                  }),
+                                              Text('Female')
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Radio(
+                                                  fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                                  value: 'OTHER',
+                                                  groupValue: gender,
+                                                  onChanged: (value) {
+                                                    gender = value.toString();
+                                                    setState(() {});
+                                                    print(value);
+                                                  }),
+                                              Text('Other')
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Radio(
+                                                  fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
+                                                  value: '',
+                                                  groupValue: gender,
+                                                  onChanged: (value) {
+                                                    gender = '';
+                                                    setState(() {});
+                                                  }),
+                                              Text('None')
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
-                            ),
-                            SizedBox(height: 5),
-                            if (errorInSpeciality)
-                              Text(
-                                'minimum 1 and maximum 3 specialities are required',
-                                style: errorTextStyle,
+                                  ),
+                                  false),
+                              // TextInputComponent('Date of Birth', TextFormField(), true),
+                              TextButton(
+                                onPressed: () async {
+                                  if (isUpdateProfile == true) {
+                                    print({
+                                      "name": name?.trim(),
+                                      "email": email == null || email!.isEmpty ? null : email,
+                                      "mobileNumber": mobileNumber,
+                                      "pincode": pincode,
+                                      "apartment": apartment,
+                                      "gender": gender!.isEmpty ? null : gender,
+                                      "city": city,
+                                      "dateOfBrth": dob,
+                                      "address": address,
+                                      "coordinates": coordinates,
+                                      "profilePicUrl": clinic.profilePicUrl
+                                    });
+
+                                    print(selecetdSepaciality.length);
+                                    if (selecetdSepaciality.length == 0 || selecetdSepaciality.length > 3) {
+                                      setState(() {
+                                        errorInSpeciality = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        errorInSpeciality = false;
+                                      });
+                                    }
+
+                                    if (_formKey.currentState!.validate() && !errorInSpeciality) {
+                                      Map<String, dynamic> payload = {
+                                        "doctorName": name?.trim(),
+                                        "clinicName": clinicName?.trim(),
+                                        "pincode": pincode == null || pincode!.isEmpty ? null : pincode,
+                                        "address": address?.trim(),
+                                        "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
+                                        "gender": gender == "" ? null : gender,
+                                        "city": city == null || city!.isEmpty ? null : city,
+                                        "speciality": selecetdSepaciality,
+                                        "dateOfBirth": dob,
+                                        "coordinates": coordinates.length < 2 ? null : coordinates,
+                                        "profilePicUrl": clinic.profilePicUrl
+                                      };
+                                      print(payload);
+                                      payload.removeWhere((key, value) => value == null || value == '');
+                                      clinicProvider.setShowModalLoading = true;
+
+                                      ServiceResponse serviceResponse = await clinicProvider.updateClinic(payload);
+
+                                      if (serviceResponse.apiResponse.error) {
+                                        clinicProvider.setShowModalLoading = false;
+
+                                        Fluttertoast.showToast(
+                                            msg: "${serviceResponse.apiResponse.errMsg}",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 2,
+                                            fontSize: 16.0);
+                                      } else {
+                                        clinicProvider.setShowModalLoading = false;
+
+                                        Fluttertoast.showToast(
+                                            msg: "Profile updated succesfully!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 2,
+                                            fontSize: 16.0);
+                                        Navigator.of(context).pop();
+                                      }
+                                    }
+                                  } else {
+                                    print({
+                                      "name": name?.trim(),
+                                      "email": email == null || email!.isEmpty ? null : email,
+                                      "mobileNumber": mobileNumber,
+                                      "pincode": pincode,
+                                      "apartment": apartment,
+                                      "gender": gender!.isEmpty ? null : gender,
+                                      "city": city,
+                                      "dateOfBrth": dob,
+                                      "fcm": '',
+                                      "uid": uid,
+                                      "address": address,
+                                      "coordinates": coordinates,
+                                    });
+
+                                    print(selecetdSepaciality.length);
+                                    if (selecetdSepaciality.length == 0 || selecetdSepaciality.length > 3) {
+                                      setState(() {
+                                        errorInSpeciality = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        errorInSpeciality = false;
+                                      });
+                                    }
+
+                                    if (_formKey.currentState!.validate() && !errorInSpeciality) {
+                                      String? token = await _fcmService.refreshToken();
+
+                                      if (token == null) {
+                                        Fluttertoast.showToast(msg: "something went wrong. try again", gravity: ToastGravity.BOTTOM);
+
+                                        return;
+                                      }
+
+                                      // print({
+                                      //   "fullName": name?.trim(),
+                                      //   "email": email == null || email!.isEmpty ? null : email,
+                                      //   "phoneNo": mobileNumber,
+                                      //   "pincode": pincode == null || pincode!.isEmpty ? null : pincode,
+                                      //   "address": address == null || address!.isEmpty ? null : address,
+                                      //   "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
+                                      //   "gender": gender == "" ? null : gender,
+                                      //   "city": city == null || city!.isEmpty ? null : city,
+                                      //   "dateOfBirth": dob,
+                                      //   "fcm": token,
+                                      //   "uid": uid,
+                                      //   "coordinates": coordinates.length < 2 ? null : coordinates,
+                                      // });
+
+                                      // print(coordinates.length);
+                                      Map<String, dynamic> payload = {
+                                        "doctorName": name?.trim(),
+                                        "clinicName": clinicName?.trim(),
+                                        "email": email == null || email!.isEmpty ? null : email,
+                                        "phoneNo": mobileNumber,
+                                        "pincode": pincode == null || pincode!.isEmpty ? null : pincode,
+                                        "address": address?.trim(),
+                                        "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
+                                        "gender": gender == "" ? null : gender,
+                                        "city": city == null || city!.isEmpty ? null : city,
+                                        "speciality": selecetdSepaciality,
+                                        "dateOfBirth": dob,
+                                        "fcm": token,
+                                        "uid": uid,
+                                        "coordinates": coordinates.length < 2 ? null : coordinates,
+                                      };
+                                      print(payload);
+                                      payload.removeWhere((key, value) => value == null || value == '');
+                                      clinicProvider.setShowModalLoading = true;
+                                      await clinicProvider.register(payload, context);
+                                      clinicProvider.setShowModalLoading = false;
+                                    }
+                                  }
+                                },
+                                child: Card(
+                                  child: Container(
+                                      width: 160,
+                                      height: 40,
+                                      color: R.color.primaryL1,
+                                      child: Center(
+                                          child: Text(
+                                        '${isUpdateProfile == true ? "Update" : "Register"}',
+                                        style: R.styles.fz16Fw500.merge(TextStyle(color: Colors.white)),
+                                      ))),
+                                ),
                               )
-                          ],
-                        ),
-                      ),
-                      true,
-                    ), // auto filled or manual
-                    GestureDetector(
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(FocusNode());
-        
-                        onError(res) {
-                          print(res);
-                          Fluttertoast.showToast(msg: "something went wrong. check your internet connection", gravity: ToastGravity.BOTTOM);
-                        }
-        
-                        Prediction? prediction = await PlacesAutocomplete.show(
-                          context: context,
-        
-                          mode: Mode.overlay,
-                          apiKey: Config.autocompleteApiKey,
-                          // sessionToken: sessionToken,
-                          components: [],
-                          types: ['(cities)'],
-                          onError: onError,
-                          strictbounds: false,
-                          hint: "Search City",
-                        );
-        
-                        if (prediction == null) {
-                          city = null;
-                          _cityController.clear();
-                          setState(() {});
-                          return;
-                        }
-        
-                        if (prediction.description != null) {
-                          city = prediction.description!.split(',')[0].trim();
-                          _cityController.text = city!;
-                        }
-                      },
-                      child: TextInputComponent(
-                        'City',
-                        TextFormField(
-                          enabled: false,
-                          cursorColor: R.color.primary,
-                          cursorHeight: 25,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                              enabledBorder: formBorder,
-                              errorStyle: errorTextStyle,
-                              focusedBorder: formBorder,
-                              disabledBorder: formBorder,
-                              errorBorder: formErrorBorder,
-                              focusedErrorBorder: formErrorBorder),
-                          controller: _cityController,
-                          onChanged: (value) {
-                            setState(() {
-                              city = value.trim();
-                            });
-                          },
-                          validator: validateCity,
-                        ),
-                        true,
-                      ),
-                    ), // auto filled or manual
-                    GestureDetector(
-                      onTap: () async {
-                        await _selectDate(context);
-                      },
-                      child: TextInputComponent(
-                        'Date of birth',
-                        TextFormField(
-                          controller: _dobController,
-                          enabled: false,
-                          cursorColor: R.color.primary,
-                          cursorHeight: 25,
-                          decoration: InputDecoration(
-                              hintText: 'Select birth date',
-                              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                              enabledBorder: formBorder,
-                              errorStyle: errorTextStyle,
-                              focusedBorder: formBorder,
-                              disabledBorder: formBorder,
-                              errorBorder: formErrorBorder,
-                              focusedErrorBorder: formErrorBorder),
-                          onChanged: (value) {},
-                        ),
-                        false,
-                      ),
-                    ), // auto filled or manual
-        
-                    TextInputComponent(
-                        'Gender',
-                        FittedBox(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Radio(
-                                        fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
-                                        value: 'MALE',
-                                        groupValue: gender,
-                                        onChanged: (value) {
-                                          print(value);
-                                          gender = value.toString();
-                                          setState(() {});
-                                        }),
-                                    Text('Male')
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Radio(
-                                        fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
-                                        value: 'FEMALE',
-                                        groupValue: gender,
-                                        onChanged: (value) {
-                                          print(value);
-                                          setState(() {});
-                                          gender = value.toString();
-                                        }),
-                                    Text('Female')
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Radio(
-                                        fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
-                                        value: 'OTHER',
-                                        groupValue: gender,
-                                        onChanged: (value) {
-                                          gender = value.toString();
-                                          setState(() {});
-                                          print(value);
-                                        }),
-                                    Text('Other')
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Radio(
-                                        fillColor: MaterialStateColor.resolveWith((states) => R.color.primary),
-                                        value: '',
-                                        groupValue: gender,
-                                        onChanged: (value) {
-                                          gender = '';
-                                          setState(() {});
-                                        }),
-                                    Text('None')
-                                  ],
-                                ),
-                              ],
-                            ),
+                            ],
                           ),
                         ),
-                        false),
-                    // TextInputComponent('Date of Birth', TextFormField(), true),
-                    TextButton(
-                      onPressed: () async {
-                        if (isUpdateProfile == true) {
-                          print({
-                            "name": name?.trim(),
-                            "email": email == null || email!.isEmpty ? null : email,
-                            "mobileNumber": mobileNumber,
-                            "pincode": pincode,
-                            "apartment": apartment,
-                            "gender": gender!.isEmpty ? null : gender,
-                            "city": city,
-                            "dateOfBrth": dob,
-                            "address": address,
-                            "coordinates": coordinates,
-                            "profilePicUrl": clinic.profilePicUrl
-                          });
-        
-                          print(selecetdSepaciality.length);
-                          if (selecetdSepaciality.length == 0 || selecetdSepaciality.length > 3) {
-                            setState(() {
-                              errorInSpeciality = true;
-                            });
-                          } else {
-                            setState(() {
-                              errorInSpeciality = false;
-                            });
-                          }
-        
-                          if (_formKey.currentState!.validate() && !errorInSpeciality) {
-                            Map<String, dynamic> payload = {
-                              "doctorName": name?.trim(),
-                              "clinicName": clinicName?.trim(),
-                              "pincode": pincode == null || pincode!.isEmpty ? null : pincode,
-                              "address": address?.trim(),
-                              "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
-                              "gender": gender == "" ? null : gender,
-                              "city": city == null || city!.isEmpty ? null : city,
-                              "speciality": selecetdSepaciality,
-                              "dateOfBirth": dob,
-                              "coordinates": coordinates.length < 2 ? null : coordinates,
-                              "profilePicUrl": clinic.profilePicUrl
-                            };
-                            print(payload);
-                            payload.removeWhere((key, value) => value == null || value == '');
-                            clinicProvider.setShowModalLoading = true;
-        
-                            ServiceResponse serviceResponse = await clinicProvider.updateClinic(payload);
-        
-                            if (serviceResponse.apiResponse.error) {
-                              clinicProvider.setShowModalLoading = false;
-        
-                              Fluttertoast.showToast(
-                                  msg: "${serviceResponse.apiResponse.errMsg}",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 2,
-                                  fontSize: 16.0);
-                            } else {
-                              clinicProvider.setShowModalLoading = false;
-        
-                              Fluttertoast.showToast(
-                                  msg: "Profile updated succesfully!",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 2,
-                                  fontSize: 16.0);
-                              Navigator.of(context).pop();
-                            }
-                          }
-                        } else {
-                          print({
-                            "name": name?.trim(),
-                            "email": email == null || email!.isEmpty ? null : email,
-                            "mobileNumber": mobileNumber,
-                            "pincode": pincode,
-                            "apartment": apartment,
-                            "gender": gender!.isEmpty ? null : gender,
-                            "city": city,
-                            "dateOfBrth": dob,
-                            "fcm": '',
-                            "uid": uid,
-                            "address": address,
-                            "coordinates": coordinates,
-                          });
-        
-                          print(selecetdSepaciality.length);
-                          if (selecetdSepaciality.length == 0 || selecetdSepaciality.length > 3) {
-                            setState(() {
-                              errorInSpeciality = true;
-                            });
-                          } else {
-                            setState(() {
-                              errorInSpeciality = false;
-                            });
-                          }
-        
-                          if (_formKey.currentState!.validate() && !errorInSpeciality) {
-                            String? token = await _fcmService.refreshToken();
-        
-                            if (token == null) {
-                              Fluttertoast.showToast(msg: "something went wrong. try again", gravity: ToastGravity.BOTTOM);
-        
-                              return;
-                            }
-        
-                            // print({
-                            //   "fullName": name?.trim(),
-                            //   "email": email == null || email!.isEmpty ? null : email,
-                            //   "phoneNo": mobileNumber,
-                            //   "pincode": pincode == null || pincode!.isEmpty ? null : pincode,
-                            //   "address": address == null || address!.isEmpty ? null : address,
-                            //   "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
-                            //   "gender": gender == "" ? null : gender,
-                            //   "city": city == null || city!.isEmpty ? null : city,
-                            //   "dateOfBirth": dob,
-                            //   "fcm": token,
-                            //   "uid": uid,
-                            //   "coordinates": coordinates.length < 2 ? null : coordinates,
-                            // });
-        
-                            // print(coordinates.length);
-                            Map<String, dynamic> payload = {
-                              "doctorName": name?.trim(),
-                              "clinicName": clinicName?.trim(),
-                              "email": email == null || email!.isEmpty ? null : email,
-                              "phoneNo": mobileNumber,
-                              "pincode": pincode == null || pincode!.isEmpty ? null : pincode,
-                              "address": address?.trim(),
-                              "apartment": apartment == null || apartment!.isEmpty ? null : apartment,
-                              "gender": gender == "" ? null : gender,
-                              "city": city == null || city!.isEmpty ? null : city,
-                              "speciality": selecetdSepaciality,
-                              "dateOfBirth": dob,
-                              "fcm": token,
-                              "uid": uid,
-                              "coordinates": coordinates.length < 2 ? null : coordinates,
-                            };
-                            print(payload);
-                            payload.removeWhere((key, value) => value == null || value == '');
-                            clinicProvider.setShowModalLoading = true;
-                            await clinicProvider.register(payload, context);
-                            clinicProvider.setShowModalLoading = false;
-                          }
-                        }
-                      },
-                      child: Card(
-                        child: Container(
-                            width: 160,
-                            height: 40,
-                            color: R.color.primaryL1,
-                            child: Center(
-                                child: Text(
-                              '${isUpdateProfile == true ? "Update" : "Register"}',
-                              style: R.styles.fz16Fw500.merge(TextStyle(color: Colors.white)),
-                            ))),
                       ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+                    ),
+                  ),
       ),
     );
   }
@@ -807,7 +872,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        ...doctorSpecialty.map(
+                        ...doctorSpeciality.map(
                           (e) => e.toLowerCase().contains(specialityFilterString.toLowerCase()) || specialityFilterString.isEmpty
                               ? CheckboxListTile(
                                   title: Text(e),

@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:booktokenclinicapp/config/app_config.dart';
 import 'package:booktokenclinicapp/constants/api_constant.dart';
+import 'package:booktokenclinicapp/main.dart';
 import 'package:booktokenclinicapp/models/api_response_model.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -9,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 
 class ApiService {
   final Dio _dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000, sendTimeout: 5000));
+    AppConfig _appConfig = getIt.get<AppConfig>();
+
 
   addCookieInceptor() async {
     print('before');
@@ -32,13 +36,13 @@ class ApiService {
   Future<List<Cookie>> getCookies() async {
     var cookieJar = await getCookieJar();
 
-    return await cookieJar.loadForRequest(Uri.parse(domainUrl));
+    return await cookieJar.loadForRequest(Uri.parse(_appConfig.baseUrl));
   }
 
   Future<ApiResponse> get(String path) async {
     try {
-      print(baseUrl + path);
-      var response = await _dio.get(baseUrl + path);
+      print(_appConfig.endPoint + path);
+      var response = await _dio.get(_appConfig.endPoint + path);
 
       return _customResponse((response.data));
     } catch (e) {
@@ -49,8 +53,8 @@ class ApiService {
 
   Future<ApiResponse> put(String path) async {
     try {
-      print(baseUrl + path);
-      var response = await _dio.put(baseUrl + path);
+      print(_appConfig.endPoint + path);
+      var response = await _dio.put(_appConfig.endPoint + path);
 
       return _customResponse((response.data));
     } catch (e) {
@@ -60,10 +64,10 @@ class ApiService {
   }
 
   Future<ApiResponse> post(String path, dynamic data) async {
-    print(baseUrl + path);
+    print(_appConfig.endPoint + path);
 
     try {
-      var response = await _dio.post(baseUrl + path, data: data);
+      var response = await _dio.post(_appConfig.endPoint + path, data: data);
 
       print(response.data);
       return _customResponse(response.data);
