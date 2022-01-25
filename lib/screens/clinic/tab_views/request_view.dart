@@ -62,31 +62,7 @@ class _CllinicRequestViewState extends State<CllinicRequestView> {
                       'Your Clinic Is Closed',
                       style: R.styles.fontColorGrey.merge(R.styles.fz16Fw500),
                     ),
-                    SizedBox(height: 20),
-                    SizedBox(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(R.color.primary),
-                          ),
-                          onPressed: () async {
-                            ServiceResponse serviceResponse = await clinicProvider.logout(context);
-
-                            if (serviceResponse.apiResponse.error) {
-                              Fluttertoast.showToast(
-                                  msg: serviceResponse.apiResponse.errMsg,
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 2,
-                                  fontSize: 16.0);
-                            }
-                          },
-                          child: Text(
-                            'LogOut',
-                            style: R.styles.fontColorWhite.merge(R.styles.fz16Fw500),
-                          ),
-                        ))
+                    
                   ]))
                 : clinicProvider.isLoadingRequest
                     ? Center(

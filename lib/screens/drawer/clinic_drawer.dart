@@ -1,4 +1,5 @@
 import 'package:booktokenclinicapp/models/clinic_model.dart';
+import 'package:booktokenclinicapp/privarcy/privarcy_policy.dart';
 import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:booktokenclinicapp/screens/my-subscriptions/subscription_page.dart';
@@ -178,6 +179,21 @@ class _ClinicDrawerState extends State<ClinicDrawer> {
                 // ),
               ],
             )),
+            ListTile(
+              dense: true,
+              horizontalTitleGap: 1,
+              leading: Icon(
+                Icons.logout,
+                size: 30,
+              ),
+              title: Text(
+                'Privacy Policy',
+                style: R.styles.fz16,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PrivarcyPolicy()));
+              },
+            ),
             ListTile(
               dense: true,
               horizontalTitleGap: 1,

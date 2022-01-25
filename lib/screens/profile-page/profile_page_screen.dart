@@ -1,4 +1,5 @@
 import 'package:booktokenclinicapp/models/clinic_model.dart';
+import 'package:booktokenclinicapp/privarcy/privarcy_policy.dart';
 import 'package:booktokenclinicapp/providers/clinic_provider.dart';
 import 'package:booktokenclinicapp/resources/resources.dart';
 import 'package:booktokenclinicapp/screens/clinic/tab_views/request_view.dart';
@@ -130,6 +131,23 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: R.styles.fz16Fw500,
                     ),
                     subtitle: Text('Help us to increase our reach')),
+                Divider(
+                  height: 2,
+                  thickness: 1,
+                ),
+                ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PrivarcyPolicy()));
+                    },
+                    leading: Icon(
+                      Icons.privacy_tip,
+                      size: 40,
+                    ),
+                    title: Text(
+                      'Privacy Policy',
+                      style: R.styles.fz16Fw500,
+                    ),
+                    subtitle: Text('View privacy policy')),
                 Divider(
                   height: 2,
                   thickness: 1,
