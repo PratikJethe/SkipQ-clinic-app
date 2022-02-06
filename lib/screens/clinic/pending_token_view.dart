@@ -1,9 +1,9 @@
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/screens/clinic/tab_views/token_view.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/screens/clinic/tab_views/token_view.dart';
 
-import 'package:booktokenclinicapp/screens/clinic/widgets/doctor_name_appbar.dart';
-import 'package:booktokenclinicapp/screens/drawer/clinic_drawer.dart';
+import 'package:skipq_clinic/screens/clinic/widgets/doctor_name_appbar.dart';
+import 'package:skipq_clinic/screens/drawer/clinic_drawer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,4 +1,4 @@
-package com.botclinic.app
+package com.skipqclinic.app
 
 import io.flutter.embedding.android.FlutterActivity
 

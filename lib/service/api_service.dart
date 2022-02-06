@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:booktokenclinicapp/config/app_config.dart';
-import 'package:booktokenclinicapp/constants/api_constant.dart';
-import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/models/api_response_model.dart';
+import 'package:skipq_clinic/config/app_config.dart';
+import 'package:skipq_clinic/constants/api_constant.dart';
+import 'package:skipq_clinic/main.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -11,8 +11,7 @@ import 'package:path_provider/path_provider.dart';
 
 class ApiService {
   final Dio _dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000, sendTimeout: 5000));
-    AppConfig _appConfig = getIt.get<AppConfig>();
-
+  AppConfig _appConfig = getIt.get<AppConfig>();
 
   addCookieInceptor() async {
     print('before');
@@ -80,9 +79,9 @@ class ApiService {
   ApiResponse _customErrorResponse(e) {
     print(e);
     // e.response?.statusCode!=502
-    if (e is DioError && e.type == DioErrorType.response &&   e.response!.data.runtimeType != String) {
+    if (e is DioError && e.type == DioErrorType.response && e.response!.data.runtimeType != String) {
       // print(e.error);
-      
+
       return ApiResponse(e.response!.data!["status"], {}, e.response!.data!["errorMsg"], true);
     } else {
       return ApiResponse(500, {}, "server error", true);

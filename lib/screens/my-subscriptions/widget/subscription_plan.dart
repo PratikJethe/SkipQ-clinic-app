@@ -1,12 +1,12 @@
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/order_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/plan_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/subscription_model.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/my-subscriptions/widget/checkout_page.dart';
-import 'package:booktokenclinicapp/screens/my-subscriptions/widget/plan_card.dart';
-import 'package:booktokenclinicapp/screens/my-subscriptions/widget/subscription_card.dart';
-import 'package:booktokenclinicapp/service/clinic/clinic_service.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/subscription_model/order_model.dart';
+import 'package:skipq_clinic/models/subscription_model/plan_model.dart';
+import 'package:skipq_clinic/models/subscription_model/subscription_model.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/my-subscriptions/widget/checkout_page.dart';
+import 'package:skipq_clinic/screens/my-subscriptions/widget/plan_card.dart';
+import 'package:skipq_clinic/screens/my-subscriptions/widget/subscription_card.dart';
+import 'package:skipq_clinic/service/clinic/clinic_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -53,7 +53,15 @@ class _SubscriptionPlansState extends State<SubscriptionPlans> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  hasActivePlan ? Text('Active Plan',style: R.styles.fz16Fw700,) : Text('Plans',style: R.styles.fz16Fw700,),
+                  hasActivePlan
+                      ? Text(
+                          'Active Plan',
+                          style: R.styles.fz16Fw700,
+                        )
+                      : Text(
+                          'Plans',
+                          style: R.styles.fz16Fw700,
+                        ),
                   SizedBox(
                     height: 10,
                   ),
@@ -73,24 +81,25 @@ class _SubscriptionPlansState extends State<SubscriptionPlans> {
         SizedBox(
           height: 20,
         ),
-      if(!hasActivePlan)  SizedBox(
-            height: 50,
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(R.color.primary),
-              ),
-              onPressed: () {
-                print(selectedPlanId);
-                if (selectedPlanId != null) {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => CheckoutPage(planId: selectedPlanId!)));
-                }
-              },
-              child: Text(
-                'Activate',
-                style: R.styles.fontColorWhite.merge(R.styles.fz16Fw500),
-              ),
-            )),
+        if (!hasActivePlan)
+          SizedBox(
+              height: 50,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(R.color.primary),
+                ),
+                onPressed: () {
+                  print(selectedPlanId);
+                  if (selectedPlanId != null) {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => CheckoutPage(planId: selectedPlanId!)));
+                  }
+                },
+                child: Text(
+                  'Activate',
+                  style: R.styles.fontColorWhite.merge(R.styles.fz16Fw500),
+                ),
+              )),
         SizedBox(
           height: 10,
         ),

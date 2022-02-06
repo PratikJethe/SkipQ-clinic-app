@@ -1,10 +1,10 @@
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/modal-screen/modal_loading_screen.dart';
-import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
-import 'package:booktokenclinicapp/widgets/textfield_borders.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/modal-screen/modal_loading_screen.dart';
+import 'package:skipq_clinic/widgets/custom_appbars.dart';
+import 'package:skipq_clinic/widgets/textfield_borders.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +42,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
               return isWriting
                   ? Center(
                       child: Column(
-                        crossAxisAlignment:CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(
                               width: MediaQuery.of(context).size.width * 0.9,
@@ -122,20 +122,22 @@ class _NoticeScreenState extends State<NoticeScreen> {
                       ),
                     )
                   : Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.9,
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
                         // margin: EdgeInsets.all(10),
                         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: R.color.primaryL1),
                         child: Center(
                           child: Text(
-                            clinicProvider.clinic.notice == null || clinicProvider.clinic.notice!.isEmpty ? 'No Notice' : clinicProvider.clinic.notice!,
+                            clinicProvider.clinic.notice == null || clinicProvider.clinic.notice!.isEmpty
+                                ? 'No Notice'
+                                : clinicProvider.clinic.notice!,
                             style: R.styles.fz16Fw500.merge(R.styles.fontColorWhite),
                           ),
                         ),
                       ),
-                  );
+                    );
             }),
           )),
     );

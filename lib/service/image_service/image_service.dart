@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:booktokenclinicapp/resources/resources.dart';
+import 'package:skipq_clinic/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +20,6 @@ class ImageService {
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Crop Image',
-          
             toolbarColor: R.color.primary,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,

@@ -1,10 +1,10 @@
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/authentication/otp_screens/otp_verification.dart';
-import 'package:booktokenclinicapp/screens/authentication/registration_screen.dart';
-import 'package:booktokenclinicapp/service/firebase_services/auth_service.dart';
-import 'package:booktokenclinicapp/service/firebase_services/firebase_service.dart';
-import 'package:booktokenclinicapp/utils/validators.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/authentication/otp_screens/otp_verification.dart';
+import 'package:skipq_clinic/screens/authentication/registration_screen.dart';
+import 'package:skipq_clinic/service/firebase_services/auth_service.dart';
+import 'package:skipq_clinic/service/firebase_services/firebase_service.dart';
+import 'package:skipq_clinic/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:provider/provider.dart';

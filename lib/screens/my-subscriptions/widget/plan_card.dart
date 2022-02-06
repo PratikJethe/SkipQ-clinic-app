@@ -1,5 +1,5 @@
-import 'package:booktokenclinicapp/models/subscription_model/plan_model.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
+import 'package:skipq_clinic/models/subscription_model/plan_model.dart';
+import 'package:skipq_clinic/resources/resources.dart';
 import 'package:flutter/material.dart';
 
 class PlanCard extends StatefulWidget {
@@ -51,14 +51,13 @@ class _PlanCardState extends State<PlanCard> {
                   ],
                 ),
                 SizedBox(
-                          height: 30,
-                        ),
+                  height: 30,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       children: [
-                        
                         Text(
                           'Plan Benefit',
                           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
@@ -69,8 +68,9 @@ class _PlanCardState extends State<PlanCard> {
                         ),
                       ],
                     ),
- widget.selectedId==plan.id?
-                    Icon(Icons.check_circle,size:40,color: R.color.primary):Icon(Icons.check_circle_outline,size:40,color: R.color.black)
+                    widget.selectedId == plan.id
+                        ? Icon(Icons.check_circle, size: 40, color: R.color.primary)
+                        : Icon(Icons.check_circle_outline, size: 40, color: R.color.black)
                   ],
                 )
               ],

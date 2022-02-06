@@ -1,6 +1,5 @@
-
-import 'package:booktokenclinicapp/config/app_config.dart';
-import 'package:booktokenclinicapp/main.dart';
+import 'package:skipq_clinic/config/app_config.dart';
+import 'package:skipq_clinic/main.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

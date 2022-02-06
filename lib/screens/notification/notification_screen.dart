@@ -1,11 +1,11 @@
 import 'dart:developer';
 
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/notification/notification_model.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/notification/widget/notification_tile.dart';
-import 'package:booktokenclinicapp/service/clinic/clinic_service.dart';
-import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/notification/notification_model.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/notification/widget/notification_tile.dart';
+import 'package:skipq_clinic/service/clinic/clinic_service.dart';
+import 'package:skipq_clinic/widgets/custom_appbars.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -37,9 +37,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           notificationList.addAll(response.data);
           pageNo++;
         }
-        if(response.data.length ==0){
-           Fluttertoast.showToast(
-          msg: "No more notifications", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 2, fontSize: 16.0);
+        if (response.data.length == 0) {
+          Fluttertoast.showToast(
+              msg: "No more notifications", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 2, fontSize: 16.0);
         }
         isFirstLoaded = true;
         hasError = false;
@@ -88,8 +88,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           if (isPaginating && index == notificationList.length - 1)
                             Center(
                               child: CircularProgressIndicator(
-                                                          color: R.color.primaryL1,
-
+                                color: R.color.primaryL1,
                               ),
                             )
                         ],
@@ -99,8 +98,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   )
             : Center(
                 child: CircularProgressIndicator(
-                                            color: R.color.primaryL1,
-
+                  color: R.color.primaryL1,
                 ),
               ));
   }

@@ -1,18 +1,18 @@
 import 'dart:ffi';
 
-import 'package:booktokenclinicapp/config/app_config.dart';
-import 'package:booktokenclinicapp/constants/api_constant.dart';
-import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/modal-screen/modal_loading_screen.dart';
-import 'package:booktokenclinicapp/service/firebase_services/fcm_service.dart';
-import 'package:booktokenclinicapp/service/firebase_services/firebase_service.dart';
-import 'package:booktokenclinicapp/utils/validators.dart';
-import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
-import 'package:booktokenclinicapp/widgets/textfield_borders.dart';
+import 'package:skipq_clinic/config/app_config.dart';
+import 'package:skipq_clinic/constants/api_constant.dart';
+import 'package:skipq_clinic/main.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/modal-screen/modal_loading_screen.dart';
+import 'package:skipq_clinic/service/firebase_services/fcm_service.dart';
+import 'package:skipq_clinic/service/firebase_services/firebase_service.dart';
+import 'package:skipq_clinic/utils/validators.dart';
+import 'package:skipq_clinic/widgets/custom_appbars.dart';
+import 'package:skipq_clinic/widgets/textfield_borders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -107,7 +107,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       doctorSpeciality = response.data.toList().cast<String>();
 
-      if (isUpdateProfile = true) {
+      if (isUpdateProfile == true) {
         selecetdSepaciality = selecetdSepaciality.where((selected) => doctorSpeciality.contains(selected)).toList();
       }
     }
@@ -122,6 +122,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     uid = widget.uid;
     isUpdateProfile = widget.isUpdateProfile;
+    print("isUpdateProfile");
+    print(isUpdateProfile);
     clinicProvider = widget.clinicProvider;
     mobileNumber = widget.mobileNumber;
     if (isUpdateProfile == true) {
@@ -188,9 +190,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: Scaffold(
         appBar: backArrowAppbar(context),
         body: isSpecialityLoading
-            ? Center(child: CircularProgressIndicator(
-              color: R.color.primaryL1,
-            ))
+            ? Center(
+                child: CircularProgressIndicator(
+                color: R.color.primaryL1,
+              ))
             : errorSpecialityLoading
                 ? Center(
                     child: Column(
@@ -663,6 +666,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               // TextInputComponent('Date of Birth', TextFormField(), true),
                               TextButton(
                                 onPressed: () async {
+                                  print("isUpdateProfile");
+                                  print(isUpdateProfile);
                                   if (isUpdateProfile == true) {
                                     print({
                                       "name": name?.trim(),

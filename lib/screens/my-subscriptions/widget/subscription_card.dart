@@ -1,6 +1,6 @@
-import 'package:booktokenclinicapp/constants/globals.dart';
-import 'package:booktokenclinicapp/models/subscription_model/subscription_model.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
+import 'package:skipq_clinic/constants/globals.dart';
+import 'package:skipq_clinic/models/subscription_model/subscription_model.dart';
+import 'package:skipq_clinic/resources/resources.dart';
 import 'package:flutter/material.dart';
 
 class SubscriptionCard extends StatelessWidget {
@@ -59,7 +59,9 @@ class SubscriptionCard extends StatelessWidget {
                   '${subscription.subEndDate.difference(DateTime.now()).inDays.toString()} days left',
                   style: R.styles.fz16Fw700.merge(R.styles.fontColorBluishGrey),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'Plan Benefit',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),

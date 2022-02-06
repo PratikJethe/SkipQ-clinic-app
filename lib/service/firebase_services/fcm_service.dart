@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:booktokenclinicapp/service/firebase_services/firebase_service.dart';
+import 'package:skipq_clinic/service/firebase_services/firebase_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FcmService {
@@ -23,6 +23,10 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   print('here');
   print(message.messageId);
   await AwesomeNotifications().createNotification(
-
-      content: NotificationContent(id: 10, channelKey: 'basic_channel', title: message.data["title"], body: message.data["body"],));
+      content: NotificationContent(
+    id: 10,
+    channelKey: 'basic_channel',
+    title: message.data["title"],
+    body: message.data["body"],
+  ));
 }

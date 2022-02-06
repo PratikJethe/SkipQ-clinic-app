@@ -1,5 +1,5 @@
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +18,24 @@ Consumer<ClinicProvider> bottomNavigationBar(context) {
         clinicProvider.setBottomNavIndex = index;
       },
       items: [
-        bottomNavigatorItem(Icons.home, 'Tokens'),
-        bottomNavigatorItem(Icons.schedule_rounded, 'Requests'),
-        bottomNavigatorItem(Icons.account_circle_rounded, 'Profile'),
+        bottomNavigatorItem(Icon(Icons.home), 'Tokens'),
+        bottomNavigatorItem(
+            Stack(
+              children: [
+                Icon(Icons.schedule_rounded),
+                if (clinicProvider.clinicRequestedTokenList.length != 0)
+                  Positioned(
+                    right: 0,
+                    child: Container(
+                      height: 10,
+                      width: 10,
+                      decoration: BoxDecoration(color: R.color.primary, shape: BoxShape.circle),
+                    ),
+                  )
+              ],
+            ),
+            'Requests'),
+        bottomNavigatorItem(Icon(Icons.account_circle_rounded), 'Profile'),
         // bottomNavigatorItem(Icons., 'Profile'),
         // bottomNavigatorItem(Icons.bookmark, ''),
       ],
@@ -28,6 +43,6 @@ Consumer<ClinicProvider> bottomNavigationBar(context) {
   });
 }
 
-bottomNavigatorItem(IconData icon, String text) {
-  return BottomNavigationBarItem(icon: Icon(icon), label: text);
+bottomNavigatorItem(Widget icon, String text) {
+  return BottomNavigationBarItem(icon: icon, label: text);
 }

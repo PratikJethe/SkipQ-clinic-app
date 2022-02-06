@@ -1,5 +1,5 @@
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
 import 'package:flutter/material.dart';
 
 class ClinicInfoCard extends StatefulWidget {

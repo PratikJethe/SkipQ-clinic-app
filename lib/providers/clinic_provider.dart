@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/models/clinic_token_model.dart';
-import 'package:booktokenclinicapp/models/user/user_model.dart';
-import 'package:booktokenclinicapp/screens/authentication/login_screen.dart';
-import 'package:booktokenclinicapp/screens/authentication/registration_screen.dart';
-import 'package:booktokenclinicapp/screens/homepage/homepage_widget.dart';
-import 'package:booktokenclinicapp/service/api_service.dart';
-import 'package:booktokenclinicapp/service/clinic/clinic_service.dart';
+import 'package:skipq_clinic/main.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/models/clinic_token_model.dart';
+import 'package:skipq_clinic/models/user/user_model.dart';
+import 'package:skipq_clinic/screens/authentication/login_screen.dart';
+import 'package:skipq_clinic/screens/authentication/registration_screen.dart';
+import 'package:skipq_clinic/screens/homepage/homepage_widget.dart';
+import 'package:skipq_clinic/service/api_service.dart';
+import 'package:skipq_clinic/service/clinic/clinic_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -54,7 +54,6 @@ class ClinicProvider extends ChangeNotifier {
   }
 
   Future<ApiResponse> getSpecialities() async {
-
     ApiResponse response = await _apiService.get('/clinic/auth/get-specialities');
 
     return response;

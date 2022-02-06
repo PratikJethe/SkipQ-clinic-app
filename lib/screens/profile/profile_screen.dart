@@ -9,16 +9,16 @@ import 'dart:io';
 // import 'package:booktokenapp/service/firebase_services/firebase_storage_service.dart';
 // import 'package:booktokenapp/service/image_service/image_service.dart';
 // import 'package:booktokenapp/widgets/custom_appbars.dart';
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/authentication/registration_screen.dart';
-import 'package:booktokenclinicapp/screens/modal-screen/modal_loading_screen.dart';
-import 'package:booktokenclinicapp/screens/profile/widget/profile_image.dart';
-import 'package:booktokenclinicapp/service/firebase_services/firebase_storage_service.dart';
-import 'package:booktokenclinicapp/service/image_service/image_service.dart';
-import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/authentication/registration_screen.dart';
+import 'package:skipq_clinic/screens/modal-screen/modal_loading_screen.dart';
+import 'package:skipq_clinic/screens/profile/widget/profile_image.dart';
+import 'package:skipq_clinic/service/firebase_services/firebase_storage_service.dart';
+import 'package:skipq_clinic/service/image_service/image_service.dart';
+import 'package:skipq_clinic/widgets/custom_appbars.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -76,14 +76,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 onTap: () async {
                                   try {
                                     PicType? picType = await _showBottomSheet(clinicProvider.clinic.id);
-    
+
                                     print(picType);
-    
+
                                     String? url;
                                     clinicProvider.setShowModalLoading = true;
                                     if (picType == PicType.CAMERA) {
                                       url = await _updateProfilePic(ImageSource.camera, clinicProvider.clinic.id);
-    
+
                                       if (url == null) {
                                         clinicProvider.setShowModalLoading = false;
                                         return;
@@ -92,15 +92,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       url = await _updateProfilePic(ImageSource.gallery, clinicProvider.clinic.id);
                                       if (url == null) {
                                         clinicProvider.setShowModalLoading = false;
-    
+
                                         return;
                                       }
                                     } else if (picType == PicType.REMOVE) {
-    
                                       url = null;
                                     } else {
                                       clinicProvider.setShowModalLoading = false;
-    
+
                                       return;
                                     }
                                     Clinic clinic = clinicProvider.clinic;
@@ -117,12 +116,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       "clinicName": clinic.clinicName,
                                       "profilePicUrl": url
                                     };
-    
+
                                     print(payload);
-    
+
                                     payload.removeWhere((key, value) => value == null);
                                     ServiceResponse serviceResponse = await clinicProvider.updateClinic(payload);
-    
+
                                     if (!serviceResponse.apiResponse.error) {
                                       Fluttertoast.showToast(
                                           msg: 'Image succesfully updated',
@@ -141,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     clinicProvider.setShowModalLoading = false;
                                   } catch (e) {
                                     clinicProvider.setShowModalLoading = false;
-    
+
                                     print(e);
                                     Fluttertoast.showToast(
                                         msg: 'Something went wong. try again!',
@@ -189,7 +188,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               infoTile('Apartment', clinicProvider.clinic.address.apartment),
                               infoTile('City', clinicProvider.clinic.address.city),
                               infoTile('Pincode', clinicProvider.clinic.address.pincode),
-                              infoTile('Gender', clinicProvider.clinic.gender != null ? clinicProvider.clinic.gender.toString().split('.').last : null),
+                              infoTile(
+                                  'Gender', clinicProvider.clinic.gender != null ? clinicProvider.clinic.gender.toString().split('.').last : null),
                               infoTile(
                                   'Date of Birth',
                                   clinicProvider.clinic.dob != null

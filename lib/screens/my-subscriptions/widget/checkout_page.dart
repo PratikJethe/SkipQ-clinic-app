@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:booktokenclinicapp/config/app_config.dart';
-import 'package:booktokenclinicapp/constants/api_constant.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/service/api_service.dart';
+import 'package:skipq_clinic/config/app_config.dart';
+import 'package:skipq_clinic/constants/api_constant.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';

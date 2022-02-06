@@ -1,4 +1,4 @@
-import 'package:booktokenclinicapp/models/clinic_model.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
 import 'package:flutter/material.dart';
 
 class AboutClinic extends StatefulWidget {
@@ -52,7 +52,7 @@ class _AboutClinicState extends State<AboutClinic> {
             height: 10,
           ),
           Text('Pincode'),
-          Text('${clinic.address.pincode}'),
+          Text('${clinic.address.pincode??''}'),
         ],
       ),
     );

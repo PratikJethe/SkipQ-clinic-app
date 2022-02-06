@@ -1,14 +1,14 @@
-import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/models/clinic_token_model.dart';
-import 'package:booktokenclinicapp/models/notification/notification_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/order_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/plan_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/subscription_model.dart';
-// import 'package:booktokenclinicapp/models/service_model.dart/clinic/clinic_model.dart';
-// import 'package:booktokenclinicapp/models/service_model.dart/clinic/clinic_token_model.dart';
-import 'package:booktokenclinicapp/service/api_service.dart';
+import 'package:skipq_clinic/main.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/models/clinic_token_model.dart';
+import 'package:skipq_clinic/models/notification/notification_model.dart';
+import 'package:skipq_clinic/models/subscription_model/order_model.dart';
+import 'package:skipq_clinic/models/subscription_model/plan_model.dart';
+import 'package:skipq_clinic/models/subscription_model/subscription_model.dart';
+// import 'package:skipq_clinic/models/service_model.dart/clinic/clinic_model.dart';
+// import 'package:skipq_clinic/models/service_model.dart/clinic/clinic_token_model.dart';
+import 'package:skipq_clinic/service/api_service.dart';
 
 class ClinicService {
   ApiService _apiService = getIt.get<ApiService>();
@@ -154,10 +154,10 @@ class ClinicService {
     var data = {
       "isSubscriptionRequired": apiResponse.data["isSubscriptionRequired"],
       "availablePlans": apiResponse.data["availablePlans"].map<PlanModel>((plan) => PlanModel.fromJson(plan)),
-      "lastClinicSubscription":SubscriptionModel.fromJson(apiResponse.data["lastClinicSubscription"])
+      "lastClinicSubscription": SubscriptionModel.fromJson(apiResponse.data["lastClinicSubscription"])
     };
 
     print(data.toString());
-    return ServiceResponse(apiResponse, data:data);
+    return ServiceResponse(apiResponse, data: data);
   }
 }
