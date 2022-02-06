@@ -1,4 +1,4 @@
-import 'package:booktokenclinicapp/resources/colour_resource.dart';
+import 'package:skipq_clinic/resources/colour_resource.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -114,7 +114,5 @@ class ResourceStyles {
   //         borderRadius: BorderRadius.circular(50),
   //       ),
   //     );
-
-
 
 }

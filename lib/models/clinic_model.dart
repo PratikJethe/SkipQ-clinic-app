@@ -1,10 +1,10 @@
-import 'package:booktokenclinicapp/constants/globals.dart';
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/clinic_general_model/contact_model.dart';
-import 'package:booktokenclinicapp/models/clinic_general_model/clinic_address_model.dart';
-import 'package:booktokenclinicapp/models/clinic_token_model.dart';
-import 'package:booktokenclinicapp/service/clinic/clinic_service.dart';
-import 'package:booktokenclinicapp/utils/date_converter.dart';
+import 'package:skipq_clinic/constants/globals.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/clinic_general_model/contact_model.dart';
+import 'package:skipq_clinic/models/clinic_general_model/clinic_address_model.dart';
+import 'package:skipq_clinic/models/clinic_token_model.dart';
+import 'package:skipq_clinic/service/clinic/clinic_service.dart';
+import 'package:skipq_clinic/utils/date_converter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'clinic_model.g.dart';
@@ -27,7 +27,7 @@ class Clinic extends ChangeNotifier {
   DateTime? dob;
   bool isVerified;
   List<String> speciality;
-  
+
   bool hasClinicStarted;
 
   Clinic({
@@ -54,6 +54,4 @@ class Clinic extends ChangeNotifier {
   /// to JSON. The implementation simply calls the private, generated
   /// helper method `_$ClinicToJson`.
   Map<String, dynamic> toJson() => _$ClinicToJson(this);
-
- 
 }

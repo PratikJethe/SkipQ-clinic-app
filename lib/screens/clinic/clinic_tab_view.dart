@@ -1,13 +1,13 @@
 import 'dart:ffi';
 
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
 
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/screens/clinic/tab_views/about_clinic.dart';
-import 'package:booktokenclinicapp/screens/clinic/tab_views/request_view.dart';
-import 'package:booktokenclinicapp/screens/clinic/tab_views/token_view.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/screens/clinic/tab_views/about_clinic.dart';
+import 'package:skipq_clinic/screens/clinic/tab_views/request_view.dart';
+import 'package:skipq_clinic/screens/clinic/tab_views/token_view.dart';
 import 'package:flutter/material.dart';
 
 class ClinicTabView extends StatefulWidget {

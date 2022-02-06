@@ -1,8 +1,8 @@
-// // import 'package:booktokenclinicapp/providers/clinic/clinic_provider.dart';
-// // import 'package:booktokenclinicapp/providers/user_provider.dart';
-// import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-// import 'package:booktokenclinicapp/resources/resources.dart';
-// import 'package:booktokenclinicapp/widgets/textfield_borders.dart';
+// // import 'package:skipq_clinic/providers/clinic/clinic_provider.dart';
+// // import 'package:skipq_clinic/providers/user_provider.dart';
+// import 'package:skipq_clinic/providers/clinic_provider.dart';
+// import 'package:skipq_clinic/resources/resources.dart';
+// import 'package:skipq_clinic/widgets/textfield_borders.dart';
 // import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 

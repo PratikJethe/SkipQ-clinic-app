@@ -13,14 +13,14 @@ String? validateMobile(String? value) {
 
 String? validateClinicName(String? value) {
   if (value == null || value.trim().isEmpty) {
-    return 'Doctor\'s name is required';
+    return 'Clinics\'s name is required';
   }
   return null;
 }
 
 String? validateDoctorName(String? value) {
   if (value == null || value.trim().isEmpty) {
-    return 'Clinics\'s name is required';
+    return 'Doctor\'s name is required';
   }
   return null;
 }

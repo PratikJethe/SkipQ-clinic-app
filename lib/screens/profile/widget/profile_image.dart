@@ -1,5 +1,5 @@
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,8 +29,7 @@ class _DoctorProfileWidgetState extends State<DoctorProfileWidget> {
                     if (loadingProgress == null) return child;
                     return Center(
                       child: CircularProgressIndicator(
-                                                  color: R.color.primaryL1,
-
+                        color: R.color.primaryL1,
                         value: loadingProgress.expectedTotalBytes != null
                             ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                             : null,
@@ -78,8 +77,7 @@ class UserProfileWidget extends StatelessWidget {
                   if (loadingProgress == null) return child;
                   return Center(
                     child: CircularProgressIndicator(
-                                                color: R.color.primaryL1,
-
+                      color: R.color.primaryL1,
                       value: loadingProgress.expectedTotalBytes != null
                           ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                           : null,

@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:booktokenclinicapp/utils/date_converter.dart';
+import 'package:skipq_clinic/utils/date_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'plan_model.g.dart';
 
@@ -19,10 +19,8 @@ class PlanModel {
   DateTime updatedAt;
 
   PlanModel(
-
-      {
-        required this.id,
-        required this.amount,
+      {required this.id,
+      required this.amount,
       required this.currency,
       required this.duration,
       required this.isMonthly,

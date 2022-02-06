@@ -1,4 +1,4 @@
-import 'package:booktokenclinicapp/resources/resources.dart';
+import 'package:skipq_clinic/resources/resources.dart';
 import 'package:flutter/material.dart';
 
 backArrowAppbar(context) {

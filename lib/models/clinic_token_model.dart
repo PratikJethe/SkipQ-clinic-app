@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:booktokenclinicapp/constants/globals.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/models/user/user_model.dart';
+import 'package:skipq_clinic/constants/globals.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/models/user/user_model.dart';
 
-import 'package:booktokenclinicapp/utils/date_converter.dart';
+import 'package:skipq_clinic/utils/date_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'clinic_token_model.g.dart';
@@ -36,7 +36,7 @@ class ClinicToken {
       required this.tokenStatus,
       required this.updatedAt,
       required this.userType,
-       this.tokenNumber,
+      this.tokenNumber,
       this.userName,
       this.user});
 

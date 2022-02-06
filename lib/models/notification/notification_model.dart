@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/utils/date_converter.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/utils/date_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'notification_model.g.dart';
 

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/clinic/widgets/request_token_widget.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/clinic/widgets/request_token_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +62,6 @@ class _CllinicRequestViewState extends State<CllinicRequestView> {
                       'Your Clinic Is Closed',
                       style: R.styles.fontColorGrey.merge(R.styles.fz16Fw500),
                     ),
-                    
                   ]))
                 : clinicProvider.isLoadingRequest
                     ? Center(
@@ -116,7 +115,7 @@ class _CllinicRequestViewState extends State<CllinicRequestView> {
                                             backgroundColor: MaterialStateProperty.all(R.color.primary),
                                           ),
                                           onPressed: () async {
-                                          await  clinicProvider.getRequests(showLoading: true);
+                                            await clinicProvider.getRequests(showLoading: true);
                                           },
                                           child: Text(
                                             'Reload',
@@ -135,11 +134,17 @@ class _CllinicRequestViewState extends State<CllinicRequestView> {
                                     ),
                                     Row(
                                       children: [
-                                        Text('Pending Request:',style: R.styles.fz18Fw500,),
+                                        Text(
+                                          'Pending Request:',
+                                          style: R.styles.fz18Fw500,
+                                        ),
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text('${clinicProvider.clinicRequestedTokenList.length}',style: R.styles.fz20Fw500.merge(R.styles.fontColorPrimaryL1),),
+                                        Text(
+                                          '${clinicProvider.clinicRequestedTokenList.length}',
+                                          style: R.styles.fz20Fw500.merge(R.styles.fontColorPrimaryL1),
+                                        ),
                                       ],
                                     ),
                                     Expanded(

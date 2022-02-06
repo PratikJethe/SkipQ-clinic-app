@@ -1,5 +1,5 @@
-import 'package:booktokenclinicapp/models/clinic_token_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
+import 'package:skipq_clinic/models/clinic_token_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

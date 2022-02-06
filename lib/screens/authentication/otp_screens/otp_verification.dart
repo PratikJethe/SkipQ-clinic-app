@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/privarcy/privarcy_policy.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/modal-screen/modal_loading_screen.dart';
-import 'package:booktokenclinicapp/service/firebase_services/auth_service.dart';
-import 'package:booktokenclinicapp/service/firebase_services/fcm_service.dart';
-import 'package:booktokenclinicapp/utils/validators.dart';
+import 'package:skipq_clinic/main.dart';
+import 'package:skipq_clinic/privarcy/privarcy_policy.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/modal-screen/modal_loading_screen.dart';
+import 'package:skipq_clinic/service/firebase_services/auth_service.dart';
+import 'package:skipq_clinic/service/firebase_services/fcm_service.dart';
+import 'package:skipq_clinic/utils/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -83,6 +83,8 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
 
   sendOtp(String phoneNumber, String dialCode, int? forceResendToken) async {
+            Fluttertoast.showToast(msg:"Sending OTP...", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 2, fontSize: 16.0);
+
     await _firebaseAuthService.firebaseInstance.verifyPhoneNumber(
       phoneNumber: '+$dialCode$phoneNumber',
       verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
@@ -151,11 +153,10 @@ class _OtpVerificationState extends State<OtpVerification> {
                                     enabledBorder: const OutlineInputBorder(
                                       borderSide: const BorderSide(color: Colors.black, width: 1.0),
                                     ),
-                                    focusedBorder:  OutlineInputBorder(
-                                      borderSide:  BorderSide(color: R.color.black, width: 1.0),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: R.color.black, width: 1.0),
                                     ),
                                     prefixIconConstraints: BoxConstraints(minHeight: 30, maxWidth: 60, maxHeight: 30),
-
                                     prefixIcon: Container(
                                         margin: EdgeInsets.only(right: 8),
                                         decoration: BoxDecoration(
@@ -191,7 +192,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                           width: MediaQuery.of(context).size.width * 0.85,
                           child: Text('By proceeding, you agree to our', style: R.styles.fz14FontColorGrey),
                         ),
-                           GestureDetector(
+                        GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => PrivarcyPolicy()));
                           },
@@ -268,7 +269,6 @@ class _OtpVerificationState extends State<OtpVerification> {
                                     shape: PinCodeFieldShape.box,
                                     borderRadius: BorderRadius.circular(5),
                                     fieldHeight: 50,
-                                    
                                     fieldWidth: 40,
                                     selectedColor: R.color.primary,
                                     activeFillColor: Colors.white,
@@ -292,7 +292,9 @@ class _OtpVerificationState extends State<OtpVerification> {
                               )
                             ],
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Align(
                             alignment: Alignment.center,
                             child: MaterialButton(

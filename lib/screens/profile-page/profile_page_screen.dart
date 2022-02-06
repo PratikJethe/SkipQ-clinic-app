@@ -1,17 +1,20 @@
-import 'package:booktokenclinicapp/models/clinic_model.dart';
-import 'package:booktokenclinicapp/privarcy/privarcy_policy.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/clinic/tab_views/request_view.dart';
-import 'package:booktokenclinicapp/screens/clinic/widgets/doctor_name_appbar.dart';
-import 'package:booktokenclinicapp/screens/my-subscriptions/subscription_page.dart';
-import 'package:booktokenclinicapp/screens/notice/notice_screen.dart';
-import 'package:booktokenclinicapp/screens/profile/profile_screen.dart';
-import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
+import 'package:skipq_clinic/config/app_config.dart';
+import 'package:skipq_clinic/models/clinic_model.dart';
+import 'package:skipq_clinic/privarcy/privarcy_policy.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/clinic/tab_views/request_view.dart';
+import 'package:skipq_clinic/screens/clinic/widgets/doctor_name_appbar.dart';
+import 'package:skipq_clinic/screens/my-subscriptions/subscription_page.dart';
+import 'package:skipq_clinic/screens/notice/notice_screen.dart';
+import 'package:skipq_clinic/screens/profile/profile_screen.dart';
+import 'package:skipq_clinic/widgets/custom_appbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+
+import '../../main.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -22,6 +25,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late Clinic clinic;
+  AppConfig _appConfig = getIt.get<AppConfig>();
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ListTile(
                     onTap: () async {
                       final Email email = Email(
-                        recipients: ['booktokenhelp@gmail.com'],
+                        recipients: [_appConfig.helpEmail],
                         isHTML: false,
                       );
 

@@ -1,6 +1,6 @@
-import 'package:booktokenclinicapp/models/notification/notification_model.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/profile/widget/profile_image.dart';
+import 'package:skipq_clinic/models/notification/notification_model.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/profile/widget/profile_image.dart';
 import 'package:flutter/material.dart';
 
 class NotificationTile extends StatefulWidget {
@@ -24,15 +24,14 @@ class _NotificationTileState extends State<NotificationTile> {
     return ListTile(
       leading: DoctorProfileWidget(),
       title: Text(notification.title),
-      subtitle: Text(notification.subtitle??""),
-      trailing:!notification.isSeen? Container(
-        height: 10,
-        width: 10,
-        decoration: BoxDecoration(
-        color: R.color.primary,
-          shape: BoxShape.circle
-        ),
-      ):null,
+      subtitle: Text(notification.subtitle ?? ""),
+      trailing: !notification.isSeen
+          ? Container(
+              height: 10,
+              width: 10,
+              decoration: BoxDecoration(color: R.color.primary, shape: BoxShape.circle),
+            )
+          : null,
     );
   }
 }

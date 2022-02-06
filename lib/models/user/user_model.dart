@@ -1,7 +1,7 @@
-import 'package:booktokenclinicapp/constants/globals.dart';
-import 'package:booktokenclinicapp/models/clinic_general_model/contact_model.dart';
-import 'package:booktokenclinicapp/models/user/general_model/user_address_model.dart';
-import 'package:booktokenclinicapp/utils/date_converter.dart';
+import 'package:skipq_clinic/constants/globals.dart';
+import 'package:skipq_clinic/models/clinic_general_model/contact_model.dart';
+import 'package:skipq_clinic/models/user/general_model/user_address_model.dart';
+import 'package:skipq_clinic/utils/date_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';

@@ -1,11 +1,11 @@
-import 'package:booktokenclinicapp/models/api_response_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/plan_model.dart';
-import 'package:booktokenclinicapp/models/subscription_model/subscription_model.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/resources/resources.dart';
-import 'package:booktokenclinicapp/screens/my-subscriptions/widget/subscription_plan.dart';
-import 'package:booktokenclinicapp/service/clinic/clinic_service.dart';
-import 'package:booktokenclinicapp/widgets/custom_appbars.dart';
+import 'package:skipq_clinic/models/api_response_model.dart';
+import 'package:skipq_clinic/models/subscription_model/plan_model.dart';
+import 'package:skipq_clinic/models/subscription_model/subscription_model.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/resources/resources.dart';
+import 'package:skipq_clinic/screens/my-subscriptions/widget/subscription_plan.dart';
+import 'package:skipq_clinic/service/clinic/clinic_service.dart';
+import 'package:skipq_clinic/widgets/custom_appbars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,13 +1,13 @@
-import 'package:booktokenclinicapp/main.dart';
-import 'package:booktokenclinicapp/providers/clinic_provider.dart';
-import 'package:booktokenclinicapp/screens/clinic/pending_token_view.dart';
-import 'package:booktokenclinicapp/screens/clinic/request_token_view.dart';
-import 'package:booktokenclinicapp/screens/homepage/widget/bottom_navigation_bar.dart';
-import 'package:booktokenclinicapp/screens/homepage/widget/homepage.dart';
-import 'package:booktokenclinicapp/screens/modal-screen/modal_loading_screen.dart';
-import 'package:booktokenclinicapp/screens/profile-page/profile_page_screen.dart';
-import 'package:booktokenclinicapp/screens/profile/profile_screen.dart';
-import 'package:booktokenclinicapp/service/firebase_services/fcm_service.dart';
+import 'package:skipq_clinic/main.dart';
+import 'package:skipq_clinic/providers/clinic_provider.dart';
+import 'package:skipq_clinic/screens/clinic/pending_token_view.dart';
+import 'package:skipq_clinic/screens/clinic/request_token_view.dart';
+import 'package:skipq_clinic/screens/homepage/widget/bottom_navigation_bar.dart';
+import 'package:skipq_clinic/screens/homepage/widget/homepage.dart';
+import 'package:skipq_clinic/screens/modal-screen/modal_loading_screen.dart';
+import 'package:skipq_clinic/screens/profile-page/profile_page_screen.dart';
+import 'package:skipq_clinic/screens/profile/profile_screen.dart';
+import 'package:skipq_clinic/service/firebase_services/fcm_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -37,23 +37,20 @@ class _HomePageState extends State<HomePage> {
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     FirebaseMessaging.onMessage.listen(onBackgroundMessage);
 
-
     //terminated state
     FirebaseMessaging.instance.getInitialMessage();
   }
 
   @override
   Widget build(BuildContext context) {
-    return 
-    
-    ModalLoadingScreen(
+    return ModalLoadingScreen(
       child: Scaffold(
         bottomNavigationBar: bottomNavigationBar(context),
         // appBar: AppBar(title: Text('BookTokenUser')),
         body: SafeArea(
           child: Consumer<ClinicProvider>(builder: (context, clinicProvider, _) {
             int currentIndex = clinicProvider.bottomNavIndex;
-          
+
             if (currentIndex == 0) {
               return PendingTokenView();
             } else if (currentIndex == 1) {
