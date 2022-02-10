@@ -25,6 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [ChangeNotifierProvider(create: (_) => ClinicProvider())],
-        child: MaterialApp(title: "SkipQ Clinic", theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Lato'), home: SplashScreen()));
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "SkipQ Clinic", theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Lato'), home: SplashScreen()));
   }
 }
