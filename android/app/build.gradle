@@ -64,7 +64,6 @@ android {
        
         prod {
             dimension "SkipQ-Clinic"
-            applicationIdSuffix ".prod"
             resValue "string", "app_name", "SkipQ Clinic"
         }
     }
