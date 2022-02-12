@@ -1,3 +1,4 @@
+import 'package:launch_review/launch_review.dart';
 import 'package:skipq_clinic/config/app_config.dart';
 import 'package:skipq_clinic/models/clinic_model.dart';
 import 'package:skipq_clinic/privarcy/privarcy_policy.dart';
@@ -124,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ListTile(
                     onTap: () {
                       Share.share(
-                          'check out this app which helps you to manage your clinic tokens online and helps patients to save time and efforts \n https://play.google.com/store/apps/details?id=com.company.booktoken');
+                          'check out this app which helps you to manage your clinic tokens online and helps patients to save time and efforts \n https://play.google.com/store/apps/details?id=${_appConfig.androidAppId}');
                     },
                     leading: Icon(
                       Icons.share,
@@ -135,6 +136,23 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: R.styles.fz16Fw500,
                     ),
                     subtitle: Text('Help us to increase our reach')),
+                Divider(
+                  height: 2,
+                  thickness: 1,
+                ),
+                ListTile(
+                    onTap: () {
+                      LaunchReview.launch(androidAppId: _appConfig.androidAppId);
+                    },
+                    leading: Icon(
+                      Icons.star_rate_sharp,
+                      size: 40,
+                    ),
+                    title: Text(
+                      'Rate Us',
+                      style: R.styles.fz16Fw500,
+                    ),
+                    subtitle: Text('Rate us to improve experience')),
                 Divider(
                   height: 2,
                   thickness: 1,

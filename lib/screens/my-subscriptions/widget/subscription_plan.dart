@@ -10,7 +10,6 @@ import 'package:skipq_clinic/service/clinic/clinic_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 
 class SubscriptionPlans extends StatefulWidget {
   final bool hasActivePlan;
