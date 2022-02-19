@@ -114,6 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       "coordinates": clinic.address.coordinates,
                                       "speciality": clinic.speciality,
                                       "clinicName": clinic.clinicName,
+                                      "notice": clinic.notice,
                                       "profilePicUrl": url
                                     };
 

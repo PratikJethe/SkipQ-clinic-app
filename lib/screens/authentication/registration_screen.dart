@@ -706,7 +706,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         "speciality": selecetdSepaciality,
                                         "dateOfBirth": dob,
                                         "coordinates": coordinates.length < 2 ? null : coordinates,
-                                        "profilePicUrl": clinic.profilePicUrl
+                                        "profilePicUrl": clinic.profilePicUrl,
+                                        "notice":clinic.notice
                                       };
                                       print(payload);
                                       payload.removeWhere((key, value) => value == null || value == '');
