@@ -10,7 +10,6 @@ import 'package:skipq_clinic/screens/profile/profile_screen.dart';
 import 'package:skipq_clinic/service/firebase_services/fcm_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
