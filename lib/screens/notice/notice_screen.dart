@@ -124,17 +124,18 @@ class _NoticeScreenState extends State<NoticeScreen> {
                   : Align(
                       alignment: Alignment.topCenter,
                       child: Container(
+                        constraints: BoxConstraints(
+                          minHeight: MediaQuery.of(context).size.width * 0.4,
+                        ),
                         width: MediaQuery.of(context).size.width * 0.9,
                         // margin: EdgeInsets.all(10),
                         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: R.color.primaryL1),
-                        child: Center(
-                          child: Text(
-                            clinicProvider.clinic.notice == null || clinicProvider.clinic.notice!.isEmpty
-                                ? 'No Notice'
-                                : clinicProvider.clinic.notice!,
-                            style: R.styles.fz16Fw500.merge(R.styles.fontColorWhite),
-                          ),
+                        child: Text(
+                          clinicProvider.clinic.notice == null || clinicProvider.clinic.notice!.isEmpty
+                              ? 'No Notice'
+                              : clinicProvider.clinic.notice!,
+                          style: R.styles.fz16Fw500.merge(R.styles.fontColorWhite),
                         ),
                       ),
                     );

@@ -1,4 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:skipq_clinic/config/app_config.dart';
 import 'package:skipq_clinic/providers/clinic_provider.dart';
@@ -58,19 +59,18 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: !initializeError
-          ?
-          Scaffold(
+          ? Scaffold(
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                         child: SvgPicture.asset(
-                          'assets/images/splash_logo.svg',
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        width: MediaQuery.of(context).size.height * 0.3,
-                          fit: BoxFit.cover,
-                        )),
+                      'assets/images/splash_logo.svg',
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.height * 0.3,
+                      fit: BoxFit.cover,
+                    )),
                     Text(
                       'SkipQ Clinic',
                       style: TextStyle(color: R.color.primary, fontSize: 24, fontWeight: FontWeight.w700),
@@ -105,7 +105,11 @@ showAlertDialog(BuildContext context) {
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(R.color.primary),
         ),
-        onPressed: () async {},
+        onPressed: () async {
+          AppConfig _appConfig = getIt.get<AppConfig>();
+
+          LaunchReview.launch(androidAppId: _appConfig.androidAppId);
+        },
         child: Text(
           'Update',
           style: R.styles.fontColorWhite.merge(R.styles.fz16Fw500),
